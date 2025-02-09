@@ -5,7 +5,9 @@ import wavefunctionlookup as wfl
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((512, 512))
+displaySizeX = 512
+displaySizeY = 512
+screen = pygame.display.set_mode((displaySizeX, displaySizeY))
 clock = pygame.time.Clock()
 running = True
 highestEntropy = 9
@@ -13,7 +15,8 @@ finished = False
 triggerTime = 0
 timeToTrigger = 0
 
-scaleValue = (512/wave.numberOfTiles[0],512/wave.numberOfTiles[1])
+
+scaleValue = (displaySizeX/wave.numberOfTiles[0],displaySizeY/wave.numberOfTiles[1])
 
 #grassImg = pygame.image.load("TILES/grass.png")
 #waldImg = pygame.image.load("TILES/wald.png")
@@ -38,7 +41,16 @@ schneemannImg = pygame.transform.scale(pygame.image.load("TILES/schneemann.png")
 
 def selectImage(tile):
     if (wave.numberOfOnes(tile) > 1):
-        return tileImg
+        canvas = pygame.Surface(scaleValue,pygame.SRCALPHA)
+        canvas.fill((255,255,255,255))
+
+        for e in range (0,8):
+            if (tile&(2**e) != 0):
+                tempImg = selectImage(2**e).copy()
+                tempImg.set_alpha(128)
+                canvas.blit(tempImg,(0,0),special_flags=pygame.BLEND_RGBA_MULT)
+        return canvas
+        
     if (tile&wfl.binaryLookUpTable["grass"] != 0): return grassImg
     if (tile&wfl.binaryLookUpTable["wald"] != 0): return waldImg
     if (tile&wfl.binaryLookUpTable["kuh"] != 0): return kuhImg

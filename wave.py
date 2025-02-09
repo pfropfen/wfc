@@ -1,7 +1,7 @@
 import random
 import wavefunctionlookup as wfl
 
-numberOfTiles = (32,32)
+numberOfTiles = (16,16)
 
 # SET MAP
 map = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
@@ -20,23 +20,32 @@ def findLowestEntropyTile():
     lowest = 10
     highest = 1
     listOfLowest = []
+    listOfLowestPlus1 = []
+    listOfLowestPlus2 = []
     for y,row in enumerate(map):
         for x,col in enumerate(row):
             if (numberOfOnes(col) > 1):
                 if (numberOfOnes(col) < lowest):
                     lowest = numberOfOnes(col)
+                    listOfLowestPlus2 = listOfLowestPlus1
+                    listOfLowestPlus1 = listOfLowest
                     listOfLowest.clear()
                     listOfLowest.append((x,y,col))
                 elif (numberOfOnes(col) == lowest):
                     listOfLowest.append((x,y,col))
+                elif (numberOfOnes(col) == lowest+1):
+                    listOfLowestPlus1.append((x,y,col))
+                elif (numberOfOnes(col) == lowest+2):
+                    listOfLowestPlus2.append((x,y,col))
     for y,row in enumerate(map):
         for x,col in enumerate(row):
             if (numberOfOnes(col) > highest):
                 highest = numberOfOnes(col)
                 
-    print("List of Lowest: ", listOfLowest)
+    #print("List of Lowest: ", listOfLowest)
     if (len(listOfLowest) == 0):
         return 0, highest
+    listOfLowest += listOfLowestPlus1 + listOfLowestPlus2
     return random.choice(listOfLowest), highest
     
     
@@ -50,7 +59,6 @@ def collapseTile(tile):
         if (t&(2**ind) != 0):
             r -= 1
             if (r == 0):
-                #print("ind: ", bin(2**ind))
                 t = 2**ind
         ind+=1
     return t
@@ -93,6 +101,29 @@ def updateMap(toUpdate):
             map[y-1][x] &= condition
             if (temp != map[y-1][x]):
                 nextUpdate.append((x,y-1,map[y-1][x]))
+ 
+ 
+#        if (x+1 < len(map[0]) and y-1 > 0):
+#            temp = map[y-1][x+1]
+#            map[y-1][x+1] &= condition
+#            if (temp != map[y-1][x+1]):
+#                nextUpdate.append((x+1,y-1,map[y-1][x+1]))
+#        if (x+1 < len(map[0]) and y+1 < len(map)):
+#            temp = map[y+1][x+1]
+#            map[y+1][x+1] &= condition
+#            if (temp != map[y+1][x+1]):
+#                nextUpdate.append((x+1,y+1,map[y+1][x+1]))
+#        if (x-1 > 0) and y+1 < len(map):
+#            temp = map[y+1][x-1]
+#            map[y+1][x-1] &= condition
+#            if (temp != map[y+1][x-1]):
+#                nextUpdate.append((x-1,y+1,map[y+1][x-1]))
+#        if (x-1 > 0) and y-1 > 0:
+#            temp = map[y-1][x-1]
+#            map[y-1][x-1] &= condition
+#            if (temp != map[y-1][x-1]):
+#                nextUpdate.append((x-1,y-1,map[y-1][x-1]))
+        
     if (len(nextUpdate)>0):
         updateMap(nextUpdate)
         
@@ -124,34 +155,22 @@ def prettyPrintMap(map):
     
                 
 
-print("WAVE FUNCTION COLLAPSE ALGORITHM")
-print("--------------------------------")
-
-
-
-
-# PRINT MAP
-#print([bin(x) for y in map for x in y])
-
-#print(bin(combinedTileCondition(0b111110000)))
-
-
 
 def algorithmStep(highestEntropy):
     lowestEntropyTile, highestEntropy = findLowestEntropyTile()
     if (highestEntropy <= 1):
         return True
-    print("highestEntropy: ", highestEntropy)
+    #print("highestEntropy: ", highestEntropy)
     x = lowestEntropyTile[0]
     y = lowestEntropyTile[1]
 
-    print("x: ",x)
-    print("y: ",y)
+    #print("x: ",x)
+    #print("y: ",y)
 
     map[y][x] = collapseTile(map[y][x])
     updateMap([(x,y,map[y][x])])
 
-    prettyPrintMap(map)
+    #prettyPrintMap(map)
     
     return False
          
