@@ -1,9 +1,9 @@
 # WAVE FUNCTION TILE LOOKUP TABLE
 
 tileCompatibilityList = [0b001001111, # gras
-                         0b000000011, # wald
-                         0b000000001, # kuh
-                         0b000011001, # strand
+                         0b001001111, # wald
+                         0b000000011, # kuh
+                         0b000011011, # strand
                          0b000111000, # wasser
                          0b000010000, # fisch
                          0b011000011, # berg
@@ -12,9 +12,9 @@ tileCompatibilityList = [0b001001111, # gras
                    
 
 tileCompatibilityLookUpTable = {0b000000001:0b001001111, # gras
-                                0b000000010:0b000000011, # wald
-                                0b000000100:0b000000001, # kuh
-                                0b000001000:0b000011001, # strand
+                                0b000000010:0b001001111, # wald
+                                0b000000100:0b000000011, # kuh
+                                0b000001000:0b000011011, # strand
                                 0b000010000:0b000111000, # wasser
                                 0b000100000:0b000010000, # fisch
                                 0b001000000:0b011000011, # berg

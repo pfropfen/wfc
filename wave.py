@@ -1,6 +1,12 @@
 import random
 import wavefunctionlookup as wfl
 
+numberOfTiles = (32,32)
+
+# SET MAP
+map = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
+
+
 def numberOfOnes(n):
     c = 0
     while n:
@@ -11,23 +17,28 @@ def numberOfOnes(n):
 
 def findLowestEntropyTile():
     # FIND LOWEST ENTROPY TILE 
-    lowest = 9
+    lowest = 10
     highest = 1
-    listOfLowest = list()
+    listOfLowest = []
     for y,row in enumerate(map):
         for x,col in enumerate(row):
-            if (numberOfOnes(col) < lowest):
-                lowest = numberOfOnes(col)
-                listOfLowest.clear()
-                listOfLowest.append((x,y,col))
-            elif (numberOfOnes(col) == lowest):
-                listOfLowest.append((x,y,col))
+            if (numberOfOnes(col) > 1):
+                if (numberOfOnes(col) < lowest):
+                    lowest = numberOfOnes(col)
+                    listOfLowest.clear()
+                    listOfLowest.append((x,y,col))
+                elif (numberOfOnes(col) == lowest):
+                    listOfLowest.append((x,y,col))
     for y,row in enumerate(map):
         for x,col in enumerate(row):
             if (numberOfOnes(col) > highest):
                 highest = numberOfOnes(col)
-         
+                
+    print("List of Lowest: ", listOfLowest)
+    if (len(listOfLowest) == 0):
+        return 0, highest
     return random.choice(listOfLowest), highest
+    
     
 def collapseTile(tile):
     t = tile
@@ -92,7 +103,7 @@ def prettyPrintMap(map):
             print("-", end='')
              
     distance = 6
-    drawHorizontalLine(distance*3+11*5)
+    drawHorizontalLine(distance*numberOfTiles[0]-1+11*numberOfTiles[0]+1)
     for y in range (0,len(map[0])):
         print("")
         print("|   ", end='')
@@ -107,7 +118,7 @@ def prettyPrintMap(map):
             for a in range (0,int(distance/2)):
                 print(" ", end='')
         print("")
-        drawHorizontalLine(distance*3+11*5)          
+        drawHorizontalLine(distance*numberOfTiles[0]-1+11*numberOfTiles[0]+1)          
     print("")
 
     
@@ -117,8 +128,7 @@ print("WAVE FUNCTION COLLAPSE ALGORITHM")
 print("--------------------------------")
 
 
-# SET MAP
-map = [[0b111111111 for x in range(0,4)] for y in range(0,4)]
+
 
 # PRINT MAP
 #print([bin(x) for y in map for x in y])
@@ -126,14 +136,14 @@ map = [[0b111111111 for x in range(0,4)] for y in range(0,4)]
 #print(bin(combinedTileCondition(0b111110000)))
 
 
-highestEntropy = 9
-while True:
+
+def algorithmStep(highestEntropy):
     lowestEntropyTile, highestEntropy = findLowestEntropyTile()
     if (highestEntropy <= 1):
-        break
+        return True
     print("highestEntropy: ", highestEntropy)
-    x = random.randint(0,len(map)-1)
-    y = random.randint(0,len(map[0])-1)
+    x = lowestEntropyTile[0]
+    y = lowestEntropyTile[1]
 
     print("x: ",x)
     print("y: ",y)
@@ -142,6 +152,8 @@ while True:
     updateMap([(x,y,map[y][x])])
 
     prettyPrintMap(map)
+    
+    return False
          
 
 
