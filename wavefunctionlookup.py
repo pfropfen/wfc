@@ -1,25 +1,22 @@
+import pandas as pd
+
+
 # WAVE FUNCTION TILE LOOKUP TABLE
 
-tileCompatibilityList = [0b001001111, # gras
-                         0b000000011, # wald
-                         0b000000001, # kuh
-                         0b000011001, # strand
-                         0b000111000, # wasser
-                         0b000010000, # fisch
-                         0b011000001, # berg
-                         0b111000000, #bergschnee
-                         0b010000000] #schneemann
-                   
+data = pd.read_excel("restrictions.xlsx", usecols="AI")
 
-tileCompatibilityLookUpTable = {0b000000001:0b001001111, # gras
-                                0b000000010:0b000000011, # wald
-                                0b000000100:0b000000001, # kuh
-                                0b000001000:0b000011001, # strand
-                                0b000010000:0b000111000, # wasser
-                                0b000100000:0b000010000, # fisch
-                                0b001000000:0b011000001, # berg
-                                0b010000000:0b111000000, #bergschnee
-                                0b100000000:0b010000000} #schneemann
+
+tileCompatibilityList = []
+tileCompatibilityLookUpTable = {}
+
+ind = 0
+
+for tile in data.values:
+    tileCompatibilityList.append(int(tile[0],2))
+    tileCompatibilityLookUpTable[2**ind] = int(tile[0],2)
+    ind += 1
+
+
                                 
 binaryLookUpTable = {"grass":0b000000001,
                      "wald":0b000000010,
