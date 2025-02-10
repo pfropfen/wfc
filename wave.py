@@ -1,7 +1,7 @@
 import random
 import wavefunctionlookup as wfl
 
-numberOfTiles = (16,16)
+numberOfTiles = (8,8)
 entropyTolerance = 5
 
 # SET MAP
