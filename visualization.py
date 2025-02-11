@@ -63,7 +63,7 @@ def selectImage(tile):
     if (tile&wfl.binaryLookUpTable["schneemann"] != 0): return schneemannImg
 
 
-wave.map = dist.distributeMap(wave.map, 8)
+wave.map = dist.distributeMap(wave.map, dist.numberOfParts)
 while running:
     timeToTrigger += clock.tick(60)  # limits FPS to 60
     
