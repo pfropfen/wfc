@@ -63,7 +63,7 @@ def selectImage(tile):
     if (tile&wfl.binaryLookUpTable["schneemann"] != 0): return schneemannImg
 
 
-wave.map = dist.distributeMap(wave.map, dist.numberOfParts)
+#wave.map = dist.distributeMap(wave.map, dist.numberOfParts)
 while running:
     timeToTrigger += clock.tick(60)  # limits FPS to 60
     
@@ -73,7 +73,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     if (not finished) and (timeToTrigger >= triggerTime):
-#        finished = wave.algorithmStep(highestEntropy)
+        finished = wave.algorithmStep(highestEntropy)
     
         timeToTrigger = 0
     # fill the screen with a color to wipe away anything from last frame

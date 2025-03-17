@@ -18,7 +18,7 @@ def getNumberOfParts():
 
 @app.route("/entropyTolerance")
 def getEntropyTolerance():
-    return flask.jsonify(numberOfParts)
+    return flask.jsonify(entropyTolerance)
 
 
 

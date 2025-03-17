@@ -1,8 +1,8 @@
 import random
 import wavefunctionlookup as wfl
 
-numberOfTiles = (16,16)
-entropyTolerance = 5
+numberOfTiles = (-1,-1)
+entropyTolerance = -1
 
 # SET MAP
 map = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
@@ -111,28 +111,6 @@ def updateMap(toUpdate):
             map[y-1][x] &= condition
             if (temp != map[y-1][x]):
                 nextUpdate.append((x,y-1,map[y-1][x]))
- 
- 
-#        if (x+1 < len(map[0]) and y-1 > 0):
-#            temp = map[y-1][x+1]
-#            map[y-1][x+1] &= condition
-#            if (temp != map[y-1][x+1]):
-#                nextUpdate.append((x+1,y-1,map[y-1][x+1]))
-#        if (x+1 < len(map[0]) and y+1 < len(map)):
-#            temp = map[y+1][x+1]
-#            map[y+1][x+1] &= condition
-#            if (temp != map[y+1][x+1]):
-#                nextUpdate.append((x+1,y+1,map[y+1][x+1]))
-#        if (x-1 > 0) and y+1 < len(map):
-#            temp = map[y+1][x-1]
-#            map[y+1][x-1] &= condition
-#            if (temp != map[y+1][x-1]):
-#                nextUpdate.append((x-1,y+1,map[y+1][x-1]))
-#        if (x-1 > 0) and y-1 > 0:
-#            temp = map[y-1][x-1]
-#            map[y-1][x-1] &= condition
-#            if (temp != map[y-1][x-1]):
-#                nextUpdate.append((x-1,y-1,map[y-1][x-1]))
         
     if (len(nextUpdate)>0):
         updateMap(nextUpdate)

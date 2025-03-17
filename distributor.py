@@ -1,16 +1,47 @@
 import wave
 import math
+import requests
+from flask import Flask, request, render_template, redirect
+import uuid
+
+
+app = Flask(__name__)
+
+@app.route("/")
+def showHome():
+    return "SERVICE FOR DISTRIBUTING MAPS"
+    
+@app.route("/generateMap",methods=["GET","POST"])
+def generateMap():
+    if request.method == 'POST':
+        generateMap()
+        return render_template('distributor.html')+"\n<H1> BLABLA </H1>"
+    elif request.method == 'GET':
+        return render_template('distributor.html')
 
 
 
-#RULES
-numberOfTiles = (16,16)
-entropyTolerance = 5
+
+def getRules():
+    # GET RULES
+    numberOfTilesResponse = requests.get("http://127.0.0.1:5000/numberOfTiles").json()
+    numberOfPartsResponse = requests.get("http://127.0.0.1:5000/numberOfParts").json()
+    entropyToleranceResponse = requests.get("http://127.0.0.1:5000/entropyTolerance").json()
+
+    numberOfTiles = (numberOfTilesResponse[0],numberOfTilesResponse[1])
+    numberOfParts = numberOfPartsResponse
+    entropyTolerance = entropyToleranceResponse
+    
+    return {"numberOfTiles":numberOfTiles, "numberOfParts":numberOfParts, "entropyTolerance":entropyTolerance}
 
 
-fullMap = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
 
-numberOfParts = 4
+def setMap(numberOfTiles):
+    # SET MAP
+    fullMap = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
+    return fullMap
+
+
 
 
     
@@ -47,19 +78,7 @@ def distributeMap(map, numberOfParts):
             wave.updateMap([(x,y,map[y][x])])
             map[y+1][x] = wave.collapseTile(map[y+1][x])
             wave.updateMap([(x,y+1,map[y+1][x])])
-            
-#    for i in range (0,divisions):
-#        for j in range (0,divisions):
-#            if (i == divisions-1 and j == divisions-1):
-#                mapParts[j].append(map[j*int(numberOfTiles[1]/divisions):][i*int(numberOfTiles[0]/divisions):])
-#            elif (i==divisions-1):
-#                mapParts[j].append(map[j*int(numberOfTiles[1]/divisions):(j+1)*int(numberOfTiles[1]/divisions)][i*int(numberOfTiles[0]/divisions):])
-#            elif (j == divisions-1):
-#                mapParts[j].append(map[j*int(numberOfTiles[1]/divisions):][i*int(numberOfTiles[0]/divisions):(i+1)*int(numberOfTiles[0]/divisions)])
-#            else:
-#                print("appening: ", map[j*int(numberOfTiles[1]/divisions):(j+1)*int(numberOfTiles[1]/divisions)][i*int(numberOfTiles[0]/divisions):(i+1)*int(numberOfTiles[0]/divisions)])
-#                mapParts[j].append(map[j*int(numberOfTiles[1]/divisions):(j+1)*int(numberOfTiles[1]/divisions)][i*int(numberOfTiles[0]/divisions):(i+1)*int(numberOfTiles[0]/divisions)])
-      
+              
 
     for x in range (0,len(map[0])):
         for y in range (0,len(map)):
@@ -70,6 +89,22 @@ def distributeMap(map, numberOfParts):
 
 
 
+    def generateMap():
+        rules = getRules()
+        wave.numberOfTiles = rules["numberOfTiles"]
+        wave.entropyTolerance = rules["entropyTolerance"]
+        fullMap = setMap(rules["numberOfTiles"])
+        mapParts = distributeMap(fullMap, rules["numberOfParts"])
+        
+        # 
+        mapID = str(uuid.uuid4())
+        
+        for x in range(0,len(mapParts[0])):
+            for y in range(0,len(mapParts)):
+                # ETWAS
+                
+        # SEND PARTS TO HUB
+        
         
         
         
