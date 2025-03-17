@@ -144,21 +144,16 @@ def prettyPrintMap(map):
                 
 
 
-def algorithmStep(highestEntropy):
+def algorithmStep():
     lowestEntropyTile, highestEntropy = findLowestEntropyTile()
     if (highestEntropy <= 1):
         return True
-    #print("highestEntropy: ", highestEntropy)
+
     x = lowestEntropyTile[0]
     y = lowestEntropyTile[1]
 
-    #print("x: ",x)
-    #print("y: ",y)
-
     map[y][x] = collapseTile(map[y][x])
     updateMap([(x,y,map[y][x])])
-
-    #prettyPrintMap(map)
     
     return False
          

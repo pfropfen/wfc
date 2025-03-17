@@ -5,17 +5,9 @@ import uuid
 # HUB TESTER
 
 
-url = "http://localhost:5000/saveChunks"
+url = "http://localhost:5002/getMapChunkByChunkID/5d15b112-42b9-4569-8ad2-e2e146337afc"
 
-content = json.dumps(["hure", "sohn"])
 
-data1 = {"mapID":str(uuid.uuid4()),"chunkID":str(uuid.uuid4()), "locX":1,"locY":2,"content":content}
-data2 = {"mapID":str(uuid.uuid4()),"chunkID":str(uuid.uuid4()), "locX":3,"locY":4,"content":content}
-data3 = {"mapID":str(uuid.uuid4()),"chunkID":str(uuid.uuid4()), "locX":4,"locY":5,"content":content}
+result = requests.get(url)
 
-data = [data1,data2,data3]
-
-obj = json.dumps(data)
-result = requests.post(url, json=obj)
-
-print("result: ", result)
+print("result: ", result.content)
