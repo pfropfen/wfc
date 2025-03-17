@@ -3,19 +3,23 @@ import math
 import requests
 from flask import Flask, request, render_template, redirect
 import uuid
+import json
 
 
 app = Flask(__name__)
+
+huburl = "http://localhost:5002"
+managerurl = "http://localhost:5000"
 
 @app.route("/")
 def showHome():
     return "SERVICE FOR DISTRIBUTING MAPS"
     
-@app.route("/generateMap",methods=["GET","POST"])
-def generateMap():
+@app.route("/mapGenerator",methods=["GET","POST"])
+def mapGenerator():
     if request.method == 'POST':
         generateMap()
-        return render_template('distributor.html')+"\n<H1> BLABLA </H1>"
+        return render_template('distributor.html')+"\n<H1> GENERATED </H1>"
     elif request.method == 'GET':
         return render_template('distributor.html')
 
@@ -24,9 +28,9 @@ def generateMap():
 
 def getRules():
     # GET RULES
-    numberOfTilesResponse = requests.get("http://127.0.0.1:5000/numberOfTiles").json()
-    numberOfPartsResponse = requests.get("http://127.0.0.1:5000/numberOfParts").json()
-    entropyToleranceResponse = requests.get("http://127.0.0.1:5000/entropyTolerance").json()
+    numberOfTilesResponse = requests.get(managerurl+"/numberOfTiles").json()
+    numberOfPartsResponse = requests.get(managerurl+"/numberOfParts").json()
+    entropyToleranceResponse = requests.get(managerurl+"/entropyTolerance").json()
 
     numberOfTiles = (numberOfTilesResponse[0],numberOfTilesResponse[1])
     numberOfParts = numberOfPartsResponse
@@ -36,9 +40,9 @@ def getRules():
 
 
 
-def setMap(numberOfTiles):
+def setMap(t):
     # SET MAP
-    fullMap = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
+    fullMap = [[0b111111111 for x in range(0,t[0])] for y in range(0,t[1])]
     return fullMap
 
 
@@ -49,15 +53,15 @@ def setMap(numberOfTiles):
 
 def distributeMap(map, numberOfParts):
     divisions = int(math.sqrt(numberOfParts))
-    mapParts = []
+    mapChunks = []
     for i in range (0,divisions):
-        mapParts.append([])
+        mapChunks.append([])
         for j in range (0,divisions):
-            mapParts[i].append([])
+            mapChunks[i].append([])
             for k in range (0,int(len(map)/divisions)):
-                mapParts[i][j].append([])
+                mapChunks[i][j].append([])
                 for l in range (0,int(len(map[0])/divisions)):
-                    mapParts[i][j][k].append(0)
+                    mapChunks[i][j][k].append(0)
         
         
     if (len(map) % divisions != 0) or (len(map[0]) % divisions != 0):
@@ -82,28 +86,31 @@ def distributeMap(map, numberOfParts):
 
     for x in range (0,len(map[0])):
         for y in range (0,len(map)):
-            mapParts[int(y/(len(map)/divisions))][int(x/(len(map[0])/divisions))][y%int(len(map)/divisions)][x%int(len(map[0])/divisions)] = map[y][x]
-    wave.prettyPrintMap(mapParts[0][0])
-    #print(mapParts)
-    return mapParts    
+            mapChunks[int(y/(len(map)/divisions))][int(x/(len(map[0])/divisions))][y%int(len(map)/divisions)][x%int(len(map[0])/divisions)] = map[y][x]
+    #wave.prettyPrintMap(mapChunks[0][0])
+    #print("MAPCHUNKS: ",mapChunks)
+    return mapChunks    
 
 
 
-    def generateMap():
-        rules = getRules()
-        wave.numberOfTiles = rules["numberOfTiles"]
-        wave.entropyTolerance = rules["entropyTolerance"]
-        fullMap = setMap(rules["numberOfTiles"])
-        mapParts = distributeMap(fullMap, rules["numberOfParts"])
-        
-        # 
-        mapID = str(uuid.uuid4())
-        
-        for x in range(0,len(mapParts[0])):
-            for y in range(0,len(mapParts)):
-                # ETWAS
-                
-        # SEND PARTS TO HUB
+def generateMap():
+    rules = getRules()
+    wave.numberOfTiles = rules["numberOfTiles"]
+    wave.entropyTolerance = rules["entropyTolerance"]
+    fullMap = setMap(rules["numberOfTiles"])
+    wave.map = fullMap
+    mapChunks = distributeMap(fullMap, rules["numberOfParts"])
+    
+    
+    data = []
+    mapID = str(uuid.uuid4())
+
+    for x in range(0,len(mapChunks[0])):
+        for y in range(0,len(mapChunks)):
+            data.append({"mapID":mapID,"chunkID":str(uuid.uuid4()), "locX":x,"locY":y,"content":mapChunks[y][x]})
+    obj = json.dumps(data)
+    result = requests.post(huburl+"/saveChunks", json=obj)
+    # SEND PARTS TO HUB
         
         
         
