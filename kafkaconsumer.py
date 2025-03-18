@@ -8,7 +8,7 @@ from kafka import KafkaConsumer
 
 
 print("create consumer..")
-consumer = KafkaConsumer(bootstrap_servers = ["192.168.1.87:9092"], value_deserializer=json.loads)
+consumer = KafkaConsumer(bootstrap_servers = ["192.168.1.33:9092"], value_deserializer=json.loads)
 
 print("subscribe topic..")
 consumer.subscribe("maptickets")

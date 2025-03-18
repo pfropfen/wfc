@@ -107,7 +107,7 @@ def generateMap():
 
     for x in range(0,len(mapChunks[0])):
         for y in range(0,len(mapChunks)):
-            data.append({"mapID":mapID,"chunkID":str(uuid.uuid4()), "locX":x,"locY":y,"entropyTolerance":rules["entropyTolerance"],"content":mapChunks[y][x]})
+            data.append({"mapID":mapID,"chunkID":str(uuid.uuid4()),"locX":x,"locY":y,"entropyTolerance":rules["entropyTolerance"],"content":mapChunks[y][x]})
     obj = json.dumps(data)
     result = requests.post(huburl+"/saveChunks", json=obj)
     # SEND PARTS TO HUB

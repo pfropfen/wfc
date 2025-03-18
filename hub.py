@@ -14,7 +14,7 @@ sqlGetByTicketID = "SELECT * FROM mapchunks WHERE chunkID = %s;"
 sqlUpdateChunk = "UPDATE mapchunks SET content = %s, computed = 1 WHERE chunkID = %s;"
 
 # KAFKA PRODUCER FOR MAPTICKETS
-producer = KafkaProducer(bootstrap_servers = ["192.168.1.87:9092"],value_serializer=lambda v: json.dumps(v).encode("utf-8"))
+producer = KafkaProducer(bootstrap_servers = ["192.168.1.33:9092"],value_serializer=lambda v: json.dumps(v).encode("utf-8"))
 
 # HUB SERVICE
 
@@ -49,7 +49,7 @@ def saveChunks():
     data = json.loads(request.json)
     valuesToInsert = []
     for chunk in data:
-        valuesToInsert.append((chunk["mapID"], chunk["chunkID"], chunk["locX"], chunk["locY"], data["entropyTolerance"], json.dumps(chunk["content"]), False))
+        valuesToInsert.append((chunk["mapID"], chunk["chunkID"], chunk["locX"], chunk["locY"], chunk["entropyTolerance"], json.dumps(chunk["content"]), False))
         # CREATE MAPTICKET
         producer.send("maptickets", chunk["chunkID"])
         producer.flush()
@@ -67,7 +67,7 @@ def getMapChunkByChunkID(ID):
     return json.dumps(result)
 
 
-database = mysql.connector.connect(host="192.168.1.87", database="maps", user="root", password="root")
+database = mysql.connector.connect(host="192.168.1.33", database="maps", user="root", password="root")
 dbCursor = database.cursor()
 
 

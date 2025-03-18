@@ -1,0 +1,8 @@
+VERSION HISTORY
+---------------
+
+v09 bugfixes for hub service
+
+v08 added db for hub service
+
+v07 added test service for hub
