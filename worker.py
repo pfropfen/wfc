@@ -1,6 +1,6 @@
 import wave
 import json
-from kafka import KafkaConsumer
+import pika
 import requests
 import uuid
 
@@ -8,29 +8,50 @@ import uuid
 
 huburl = "http://localhost:5002"
 
-
+# RABBITMQ CONNECTION
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='192.168.1.33'))
+channel = connection.channel()
+channel.queue_declare(queue='maptickets', durable=True)
 
 # KAFKA CONSUMER
-print("create consumer..")
-consumer = KafkaConsumer(bootstrap_servers = ["192.168.1.33:9092"], value_deserializer=json.loads)
-print("subscribe topic..")
-consumer.subscribe("maptickets")
-print("start listening..")
+#print("create consumer..")
+#consumer = KafkaConsumer(bootstrap_servers = ["192.168.1.33:9092"], value_deserializer=json.loads)
+#print("subscribe topic..")
+#consumer.subscribe("maptickets")
+#print("start listening..")
 
-while True:
+def callback(ch, method, properties, body):
+    print("[message received]")
     finished = False
-    data = next(consumer)
-    print("received: ", data)
-    chunk = requests.get(huburl+"/getMapChunkByChunkID/"+data.value)
-    wave.map = chunk[5]
+    print("[request ticket]")
+    print("BODY DECODED: ", body.decode())
+    chunk = requests.get(huburl+"/getMapChunkByChunkID/"+body.decode())
+    print("[set map]")
+    chunk = json.loads(chunk.content.decode())
+    print("CHUNK CONTENT: ", chunk)
+    print("CHUNK5 CONTENT: ", chunk[5])
+    mapdata = json.loads(chunk[5])
+    
+    wave.map = mapdata
+    print("[set entropy tolerance]")
     wave.entropyTolerance = chunk[4]
-    wave.numberOfTiles = (len(chunk[5][0]),len(chunk[5]))
-    highestEntropy = 9
+    print("[set number of tiles]")
+    wave.numberOfTiles = (len(mapdata[0]),len(mapdata))
+    print("[start algorythm]")
     while not finished:
         if (not finished):
-            finished = wave.algorithmStep(highestEntropy)
-    result = requests.post(huburl+"/updateChunkByID", json.dumps({"chunkID":data.value,"content":wave.map}))
+            finished = wave.algorithmStep()
+    print("[finished]")
+    
+    result = requests.post(huburl+"/updateChunkByID", json = json.dumps({"chunkID":body.decode(),"content":wave.map}))
     print("Result: ", result)
+    ch.basic_ack(delivery_tag=method.delivery_tag)
+    
+print("WORKER SERVICE")
+print("--------------")
+channel.basic_qos(prefetch_count=1)
+channel.basic_consume(queue="maptickets", on_message_callback=callback)
+channel.start_consuming()
     
     
     

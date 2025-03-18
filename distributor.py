@@ -18,8 +18,8 @@ def showHome():
 @app.route("/mapGenerator",methods=["GET","POST"])
 def mapGenerator():
     if request.method == 'POST':
-        generateMap()
-        return render_template('distributor.html')+"\n<H1> GENERATED </H1>"
+        mapuuid = generateMap()
+        return render_template('distributor.html')+"\n<H1>"+ mapuuid +"</H1>"
     elif request.method == 'GET':
         return render_template('distributor.html')
 
@@ -101,7 +101,7 @@ def generateMap():
     wave.map = fullMap
     mapChunks = distributeMap(fullMap, rules["numberOfParts"])
     
-    
+    # SEND PARTS TO HUB
     data = []
     mapID = str(uuid.uuid4())
 
@@ -110,7 +110,8 @@ def generateMap():
             data.append({"mapID":mapID,"chunkID":str(uuid.uuid4()),"locX":x,"locY":y,"entropyTolerance":rules["entropyTolerance"],"content":mapChunks[y][x]})
     obj = json.dumps(data)
     result = requests.post(huburl+"/saveChunks", json=obj)
-    # SEND PARTS TO HUB
+    
+    return mapID
         
         
         
