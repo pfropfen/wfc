@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v11 architecture and services cleanup
 v10 added maploader service
 v09 bugfixes for hub service
 v08 added db for hub service

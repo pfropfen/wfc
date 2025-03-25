@@ -1,11 +1,11 @@
 import random
 import wavefunctionlookup as wfl
 
+wfl.requestRestrictions()
+
 numberOfTiles = (-1,-1)
 entropyTolerance = -1
 map = [[]]
-# SET MAP
-#map = [[0b111111111 for x in range(0,numberOfTiles[0])] for y in range(0,numberOfTiles[1])]
 
 
 def numberOfOnes(n):

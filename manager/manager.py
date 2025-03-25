@@ -19,6 +19,10 @@ def getNumberOfParts():
 @app.route("/entropyTolerance")
 def getEntropyTolerance():
     return flask.jsonify(entropyTolerance)
+    
+@app.route("/restrictions")
+def getRestrictions():
+    return flask.jsonify((tileCompatibilityList,tileCompatibilityLookUpTable,binaryLookUpTable))
 
 
 
