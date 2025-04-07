@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: wfcdb-container
-        image: 192.168.1.93:9000/imgdb:v12
+        image: pfropfen/imgdb
         imagePullPolicy: Always
         env:
           - name: MYSQL_ROOT_USER
@@ -47,8 +47,6 @@ spec:
             value: "maps"
         ports:
         - containerPort: 3306
-      imagePullSecrets:
-        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
@@ -98,12 +96,12 @@ metadata:
   labels:
     app: wfcmanager
 spec:
-  #type: NodePort
+  type: NodePort
   ports:
   - port: 5000
-    #name: wfcmanager
-    #targetPort: 5000
-    #nodePort: 32756
+    name: wfcmanagerport
+    targetPort: 5000
+    nodePort: 30000
   selector:
     app: wfcmanager
 ---
@@ -123,12 +121,12 @@ spec:
     spec:
       containers:
       - name: wfcmanager-container
-        image: 192.168.1.93:9000/imgmanager:v12
+        image: pfropfen/imgmanager
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
-      imagePullSecrets:
-        - name: dockerauth
+#      imagePullSecrets:
+#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
@@ -139,12 +137,13 @@ metadata:
   labels:
     app: wfcdistributor
 spec:
-  #type: NodePort
+  type: NodePort
   ports:
   - port: 5001
-    #name: wfcmanager
-    #targetPort: 5000
-    #nodePort: 32756
+    name: distributorport
+    protocol: TCP
+    targetPort: 5001
+    nodePort: 30001
   selector:
     app: wfcdistributor
 ---
@@ -164,12 +163,12 @@ spec:
     spec:
       containers:
       - name: wfcdistributor-container
-        image: 192.168.1.93:9000/imgdistributor:v12
+        image: pfropfen/imgdistributor
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
-      imagePullSecrets:
-        - name: dockerauth
+#      imagePullSecrets:
+#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
@@ -180,12 +179,12 @@ metadata:
   labels:
     app: wfchub
 spec:
-  #type: NodePort
+  type: NodePort
   ports:
   - port: 5002
-    #name: wfcmanager
-    #targetPort: 5000
-    #nodePort: 32756
+    name: wfchubport
+    targetPort: 5002
+    nodePort: 30002
   selector:
     app: wfchub
 ---
@@ -205,12 +204,12 @@ spec:
     spec:
       containers:
       - name: wfchub-container
-        image: 192.169.1.93:9000/imghub:v12
+        image: pfropfen/imghub
         imagePullPolicy: Always
         ports:
         - containerPort: 5002
-      imagePullSecrets:
-        - name: dockerauth
+#      imagePullSecrets:
+#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
@@ -246,10 +245,10 @@ spec:
     spec:
       containers:
       - name: wfcworker-container
-        image: 192.168.1.93:9000/imgworker:v12
+        image: pfropfen/imgworker
         imagePullPolicy: Always
         ports:
         - containerPort: 5003
-      imagePullSecrets:
-        - name: dockerauth
+#      imagePullSecrets:
+#        - name: dockerauth
 

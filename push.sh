@@ -1,16 +1,16 @@
 #!/bin/bash
-ADDR=192.168.1.93:9000
-VER=12
+ADDR=pfropfen
+VER=latest
 
-sudo docker tag imgmanager $ADDR/imgmanager:v$VER
-sudo docker tag imgdistributor $ADDR/imgdistributor:v$VER
-sudo docker tag imghub $ADDR/imghub:v$VER
-sudo docker tag imgworker $ADDR/imgworker:v$VER
-sudo docker tag imgdb $ADDR/imgdb:v$VER
+sudo docker tag imgmanager $ADDR/imgmanager:$VER
+sudo docker tag imgdistributor $ADDR/imgdistributor:$VER
+sudo docker tag imghub $ADDR/imghub:$VER
+sudo docker tag imgworker $ADDR/imgworker:$VER
+sudo docker tag imgdb $ADDR/imgdb:$VER
 
-sudo docker push $ADDR/imgmanager:v$VER
-sudo docker push $ADDR/imgdistributor:v$VER
-sudo docker push $ADDR/imghub:v$VER
-sudo docker push $ADDR/imgworker:v$VER
-sudo docker push $ADDR/imgdb:v$VER
+sudo docker push $ADDR/imgmanager:$VER
+sudo docker push $ADDR/imgdistributor:$VER
+sudo docker push $ADDR/imghub:$VER
+sudo docker push $ADDR/imgworker:$VER
+sudo docker push $ADDR/imgdb:$VER
 

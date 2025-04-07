@@ -1132,3 +1132,273 @@ kubectl describe wfcdb-deployment-59c5948c94-bqkmp
 kubectl describe wfcdb-de
 kubectl describe pod wfcdb-deployment-59c5948c94-bqkmp
 shutdown now
+ls
+zip .
+sudp apt install zip
+sudo apt install zip
+cd ..
+ls
+zip -r pfropfen
+zip -r pfropfen.zip pfropfen 
+sudo zip -r pfropfen.zip pfropfen 
+ls
+python -m http.server
+python3 -m http.server
+ls
+sudo rm pfropfen.zip
+cd pfropfen
+ls
+shutdown now
+ls
+sudo nano push.sh
+ps
+psa
+killall
+sudo docker image ls
+psa
+ls
+bash push.sh
+sudo nano push.sh
+sudo docker login -u pfropfen
+bash push.sh
+ls
+cd services
+ls
+cd ..
+mv /services/wfcdeploy.yaml ./wfcdeploy.yaml
+mv ./services/wfcdeploy.yaml ./wfcdeploy.yaml
+sudo mv ./services/wfcdeploy.yaml ./wfcdeploy.yaml
+cd services
+ls
+cd ..
+ls
+sudo nano wfcdeploy.yaml 
+sudo nano push.sh
+bash push.sh
+kubectl get nodes
+kubectl get pods
+kubectl delete -f wfcdeploy.yaml 
+killall
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods
+kubectl descripe pod wfcworker-deployment-698b67bc79-kd
+kubectl describe pod wfcworker-deployment-698b67bc79-kd
+kubectl describe pod wfcworker-deployment-698b67bc79-kdktx
+kubectl describe pod wfcworker-deployment-698b57bc79-kdktx
+kubectl logs pod wfcworker-deployment-698b57bc79-kdktx
+kubectl logs wfcworker-deployment-698b57bc79-kdktx
+cd services
+cd worker
+ls
+sudo nano wavefunctionlookup.py
+sudo nano dockerfile
+sudo nano Dockerfile
+sudo nano wavefunctionlookup.py
+sudo nano Dockerfile
+cd ..
+cd distributor/
+ls
+sudo nano Dockerfile
+cd ..
+kuibectl get pods
+kubectl get pods
+kubectl logs wfchub
+kubectl logs wfchub-deployment-c9f57b5b7-vjl78
+cd hub
+cd services/hub
+sudo nano hub.py
+sudo nano Dockerfile
+cd ..
+kubectl get pods
+kubectl wfcmanager-deployment-f66898d57-p2zr8
+kubectl logs wfcmanager-deployment-f66898d57-p2zr8
+cd services/manager
+sudo nano manager.py 
+sudo nano Dockerfile
+cd ..
+cd hub
+sudo nano Dockerfile
+cd ..
+cd distributor/
+sudo nano Dockerfile
+cd ..
+ls
+cd worker
+sudo nano Dockerfile
+cd ../..
+kubectl get pods
+kubectl delete -f wfcdeploy.yaml 
+killall
+killimg
+
+killimg
+killall
+kubectl get pods
+sudo docker image ls
+killimg
+sudo docker image ls
+brc
+ls
+sudo docker image ls
+brc
+killimg
+psa
+sudo docker image ls
+kubectl get pods
+killimg
+sudo docker image ls
+sudo docker image rm -f $(sudo docker image ls)
+sudo docker image ls
+brc
+kubectl get pods
+sudo docker image ls
+psa
+bash build.sh
+bash push.sh
+kubectl get nodes
+kubectl get pods
+shutdown now
+psa
+kubectl get nodes
+kubectl get pods
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods
+kubectl logs wfcdistributor-deployment-7d766d6d7d-9lj4g
+cd services/distributor/
+sudo nano distributor.py
+cd ../..
+sudo nano /services/distributor/distributor.py
+sudo nano services/distributor/distributo
+kubectl logs wfcdistributor-deployment-7d766d6d7d-9lj4g
+sudo nano services/distributor/distributor.py
+kubectl logs wfcdistributor-deployment-7d766d6d7d-9lj4g
+sudo nano services/distributor/distributor.py
+sudo nano services/distributor/wavefunctionlookup.py 
+sudo nano services/distributor/distributor.py
+sudo nano services/worker/wavefunctionlookup.py 
+psa
+kubectl delete -f wfcdeploy.yaml 
+ls
+sudo nano rebirth.sh
+brc
+shutdown now
+rebirth
+sudo nano rebirth.sh
+rebirth
+sudo nano rebirth.sh
+kubectl get pods
+
+kubectl get pods
+kubectl logs wfcdistributor-deployment-7d766d6d7d-nb254
+sudo nano services/distributor/wavefunctionlookup.py 
+kubectl logs wfcdistributor-deployment-7d766d6d7d-nb254
+sudo nano services/manager/manager.py 
+sudo nano wfcdeploy.yaml 
+kubectl logs wfcdistributor-deployment-7d766d6d7d-nb254
+sudo nano wfcdeploy.yaml 
+kubectl delete -f wfcdeploy.yaml 
+kubectl get pods
+kubectl delete -f wfcdeploy.yaml 
+kubectl get pods
+kubectl apply -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl get pods
+kubectl delete -f wfcdeploy.yaml 
+kubectl get pods
+kubectl apply -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl get pods
+kubectl delete -f wfcdeploy.yaml
+kubectl get pods
+kubectl delete --all deployments
+kubectl delete --all pods
+kubectl get pods
+kubectl delete --all
+kubectl delete --all pods
+kubectl get pods
+psa
+cd services
+ls
+sudo nano db/db.py
+cd db
+ls
+cd ..
+ls
+sudo nano distributor/distributor.py
+sudo nano distributor/wavefunctionlookup.py 
+c d..
+cd ..
+sudo nano rebirth.sh 
+rebirth
+kubectl get pods
+sudo nano rebirth.sh
+kubectl delete -f wfcdeploy.yaml --namespace=wfc
+kubectl delete -f wfcdeploy.yaml --namespace="wfc"
+kubectl apply -f wfcdeploy.yaml
+kubectl get pods
+kubectl get nodes
+kubectl get pods
+kubectl logs wfcworker-deployment-698b57bc79-b4kww
+sudo nano services/distributor/distributor.py 
+kubectl get pods
+kubectl logs wfcdistributor-deployment-7d766d6d7d-8lmxf
+kubectl delete -f wfcdeploy.yaml
+sudo nano services/hub/hub.py
+sudo nano services/distributor/wavefunctionlookup.py 
+sudo nano services/worker/wavefunctionlookup.py 
+sudo nano services/worker/worker.py 
+sudo nano rebirth.sh 
+kubectl get pos
+kubectl get pods
+kubectl delete --all pods --grace-period=0 --force
+kubectl get pods
+sudo nano rebirth.sh 
+kubectl get pods -A
+rebirth
+kubectl cluster -info
+kubectl cluster-info
+kubectl get pods -o wide
+
+kubectl cluster-info
+kubectl get pods -o wide
+sudo nano wfcdeploy.yaml
+kubectl delete -f wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml 
+kubectl delete -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml
+kubectl apply -f wfcdeploy.yaml 
+kubectl delete -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods -o wide
+kubectl logs wfcworker-deployment-698b57bc79-dstcs
+kubectl get pods -o wide
+kubectl exec --stdin --tty wfcdb-deployment-6fc5bcf544-m669m
+kubectl exec --stdin --tty wfcdb-deployment-6fc5bcf544-m669m -- /bin/bash
+kubectl delete -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods -o wide
+kubectl delete -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods -o wide
+kubectl exec --stdin --tty wfcdb-deployment-6 -- /bin/bash
+kubectl get pods -o wide
+kubectl exec --stdin --tty wfcdb-deployment-6fc5bcf544-frz9m -- /bin/bash
+kubectl get pods -o wide
+kubectl exec --stdin --tty wfcdb-deployment-6fc5bcf544-frz9m -- /bin/bash
+kubectl delete -f wfcdeploy.yaml
+kubectl delete --all deployments
+kubectl delete --all pods
+kubectl delete --all pods --force
+kubectl get pods 
+kubectl get pods -A
+psa
+shutdown now
+kubectl get nodes
+kubectl get pods
+kubectl apply -f wfcdeploy.yaml
+kubectl get pods -o wide
+kubectl delete -f wfcdeploy.yaml
+shutdown now

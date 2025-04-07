@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v14 work on k8s deployment, added rebirth script
 v13 added hubdb, added rabbitmq, first k8s deployment, scripts for build and push
 v12 services structure changed and bugfixes
 v11 architecture and services cleanup

@@ -6,7 +6,7 @@ import uuid
 
 
 
-huburl = "wfchub:5002"
+huburl = "http://wfchub:5002"
 rabbithost = "wfcrabbit"
 
 # RABBITMQ CONNECTION
