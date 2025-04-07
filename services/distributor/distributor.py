@@ -8,8 +8,8 @@ import json
 
 app = Flask(__name__)
 
-huburl = "http://localhost:5002"
-managerurl = "http://localhost:5000"
+huburl = "wfchub:5002"
+managerurl = "wfcmanager:5000"
 
 @app.route("/")
 def showHome():

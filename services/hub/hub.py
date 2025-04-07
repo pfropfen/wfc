@@ -8,14 +8,15 @@ import pika
 
 
 # GLOBAL VARIABLES
-dbhost = "192.168.1.93"
+dbhost = "wfcdb"
+rabbithost = "wfcrabbit"
 sqlInsert = "INSERT INTO mapchunks (mapID, chunkID, locationX, locationY, entropyTolerance, content, computed) VALUES (%s, %s, %s, %s, %s, %s, %s);"
 sqlGetByTicketID = "SELECT * FROM mapchunks WHERE chunkID = %s;"
 sqlUpdateChunk = "UPDATE mapchunks SET content = %s, computed = 1 WHERE chunkID = %s;"
 sqlMapByID = "SELECT locationX,locationY,content FROM mapchunks WHERE mapID = %s;"
 
 # RABBITMQ CONNECTION
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=dbhost))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
 channel = connection.channel()
 channel.queue_declare(queue='maptickets', durable=True)
 

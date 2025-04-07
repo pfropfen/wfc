@@ -1,0 +1,255 @@
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfcdb
+  labels:
+    app: wfcdb
+spec:
+  #type: NodePort
+  ports:
+  - port: 3306
+    #name: wfcmanager
+    #targetPort: 5000
+    #nodePort: 32756
+  selector:
+    app: wfcdb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfcdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wfcdb
+  template:
+    metadata:
+      labels:
+        app: wfcdb
+    spec:
+      containers:
+      - name: wfcdb-container
+        image: 192.168.1.93:9000/imgdb:v12
+        imagePullPolicy: Always
+        env:
+          - name: MYSQL_ROOT_USER
+            value: "root"
+          - name: MYSQL_ROOT_PASSWORD
+            value: "root"
+          - name: MYSQL_USER
+            value: "wfc"
+          - name: MYSQL_PASSWORD
+            value: "wfc"
+          - name: MYSQL_DATABASE
+            value: "maps"
+        ports:
+        - containerPort: 3306
+      imagePullSecrets:
+        - name: dockerauth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfcrabbit
+  labels:
+    app: wfcrabbit
+spec:
+  #type: NodePort
+  ports:
+  - port: 5672
+    #name: wfcmanager
+    #targetPort: 5000
+    #nodePort: 32756
+  selector:
+    app: wfcrabbit
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfcrabbit-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wfcrabbit
+  template:
+    metadata:
+      labels:
+        app: wfcrabbit
+    spec:
+      containers:
+      - name: wfcrabbit-container
+        image: rabbitmq:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfcmanager
+  labels:
+    app: wfcmanager
+spec:
+  #type: NodePort
+  ports:
+  - port: 5000
+    #name: wfcmanager
+    #targetPort: 5000
+    #nodePort: 32756
+  selector:
+    app: wfcmanager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfcmanager-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wfcmanager
+  template:
+    metadata:
+      labels:
+        app: wfcmanager
+    spec:
+      containers:
+      - name: wfcmanager-container
+        image: 192.168.1.93:9000/imgmanager:v12
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+      imagePullSecrets:
+        - name: dockerauth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfcdistributor
+  labels:
+    app: wfcdistributor
+spec:
+  #type: NodePort
+  ports:
+  - port: 5001
+    #name: wfcmanager
+    #targetPort: 5000
+    #nodePort: 32756
+  selector:
+    app: wfcdistributor
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfcdistributor-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wfcdistributor
+  template:
+    metadata:
+      labels:
+        app: wfcdistributor
+    spec:
+      containers:
+      - name: wfcdistributor-container
+        image: 192.168.1.93:9000/imgdistributor:v12
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5001
+      imagePullSecrets:
+        - name: dockerauth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfchub
+  labels:
+    app: wfchub
+spec:
+  #type: NodePort
+  ports:
+  - port: 5002
+    #name: wfcmanager
+    #targetPort: 5000
+    #nodePort: 32756
+  selector:
+    app: wfchub
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfchub-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wfchub
+  template:
+    metadata:
+      labels:
+        app: wfchub
+    spec:
+      containers:
+      - name: wfchub-container
+        image: 192.169.1.93:9000/imghub:v12
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5002
+      imagePullSecrets:
+        - name: dockerauth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfcworker
+  labels:
+    app: wfcworker
+spec:
+  #type: NodePort
+  ports:
+  - port: 5003
+    #name: wfcmanager
+    #targetPort: 5000
+    #nodePort: 32756
+  selector:
+    app: wfcworker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfcworker-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wfcworker
+  template:
+    metadata:
+      labels:
+        app: wfcworker
+    spec:
+      containers:
+      - name: wfcworker-container
+        image: 192.168.1.93:9000/imgworker:v12
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5003
+      imagePullSecrets:
+        - name: dockerauth
+

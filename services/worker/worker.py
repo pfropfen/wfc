@@ -6,8 +6,8 @@ import uuid
 
 
 
-huburl = "http://localhost:5002"
-rabbithost = "192.168.1.93"
+huburl = "wfchub:5002"
+rabbithost = "wfcrabbit"
 
 # RABBITMQ CONNECTION
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
