@@ -6,14 +6,16 @@ import pika
 
 
 
+
 # GLOBAL VARIABLES
+dbhost = "192.168.1.93"
 sqlInsert = "INSERT INTO mapchunks (mapID, chunkID, locationX, locationY, entropyTolerance, content, computed) VALUES (%s, %s, %s, %s, %s, %s, %s);"
 sqlGetByTicketID = "SELECT * FROM mapchunks WHERE chunkID = %s;"
 sqlUpdateChunk = "UPDATE mapchunks SET content = %s, computed = 1 WHERE chunkID = %s;"
 sqlMapByID = "SELECT locationX,locationY,content FROM mapchunks WHERE mapID = %s;"
 
 # RABBITMQ CONNECTION
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='192.168.1.33'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=dbhost))
 channel = connection.channel()
 channel.queue_declare(queue='maptickets', durable=True)
 
@@ -32,7 +34,7 @@ def showHome():
 
 @app.route("/saveChunk", methods=["POST"])
 def saveChunk():
-    database = mysql.connector.connect(host="192.168.1.33", database="maps", user="root", password="root")
+    database = mysql.connector.connect(host=dbhost, database="maps", user="root", password="root")
     dbCursor = database.cursor()
     data = json.loads(request.json)
     valuesToInsert = (data["mapID"], data["chunkID"], data["locX"], data["locY"], data["entropyTolerance"], data["content"], False)
@@ -45,7 +47,7 @@ def saveChunk():
     
 @app.route("/updateChunkByID", methods=["POST"])
 def updateChunk():
-    database = mysql.connector.connect(host="192.168.1.33", database="maps", user="root", password="root")
+    database = mysql.connector.connect(host=dbhost, database="maps", user="root", password="root")
     dbCursor = database.cursor()
     data = json.loads(request.json)
     valuesToInsert = (json.dumps(data["content"]), data["chunkID"])
@@ -58,7 +60,7 @@ def updateChunk():
 @app.route("/saveChunks", methods=["POST"])
 def saveChunks():
     # DB CONNECTION
-    database = mysql.connector.connect(host="192.168.1.33", database="maps", user="root", password="root")
+    database = mysql.connector.connect(host=dbhost, database="maps", user="root", password="root")
     dbCursor = database.cursor()
     data = json.loads(request.json)
     valuesToInsert = []
@@ -75,7 +77,7 @@ def saveChunks():
 
 @app.route("/getMapChunkByChunkID/<uuid:ID>", methods=["GET"])
 def getMapChunkByChunkID(ID):
-    database = mysql.connector.connect(host="192.168.1.33", database="maps", user="root", password="root")
+    database = mysql.connector.connect(host=dbhost, database="maps", user="root", password="root")
     dbCursor = database.cursor()
     dbCursor.execute(sqlGetByTicketID, (str(ID),))
     result = dbCursor.fetchone()
@@ -85,7 +87,7 @@ def getMapChunkByChunkID(ID):
 
 @app.route("/getMapByID/<uuid:ID>", methods=["GET"])
 def getMapByID(ID):
-    database = mysql.connector.connect(host="192.168.1.33", database="maps", user="root", password="root")
+    database = mysql.connector.connect(host=dbhost, database="maps", user="root", password="root")
     dbCursor = database.cursor()
     dbCursor.execute(sqlMapByID, (str(ID),))
     result = dbCursor.fetchall()

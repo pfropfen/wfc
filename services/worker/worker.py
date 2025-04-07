@@ -7,18 +7,13 @@ import uuid
 
 
 huburl = "http://localhost:5002"
+rabbithost = "192.168.1.93"
 
 # RABBITMQ CONNECTION
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='192.168.1.33'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
 channel = connection.channel()
 channel.queue_declare(queue='maptickets', durable=True)
 
-# KAFKA CONSUMER
-#print("create consumer..")
-#consumer = KafkaConsumer(bootstrap_servers = ["192.168.1.33:9092"], value_deserializer=json.loads)
-#print("subscribe topic..")
-#consumer.subscribe("maptickets")
-#print("start listening..")
 
 def callback(ch, method, properties, body):
     print("[message received]")

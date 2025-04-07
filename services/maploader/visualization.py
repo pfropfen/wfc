@@ -7,7 +7,7 @@ from wave import numberOfOnes
 displaySizeX = 512
 displaySizeY = 512
 
-
+wfl.requestRestrictions()
 
 
 
