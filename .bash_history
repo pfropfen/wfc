@@ -1512,3 +1512,112 @@ kubectl logs wfcdistributor-deployment-7d766d6d7d-rjqf8
 brc
 kubectl delete -f wfcdeploy.yaml
 shutdown now
+kubectl get pods 
+kubectl delete -f wfcdeploy.yaml
+kubectl get nodes
+kubectl get pods 
+kubectl apply -f wfcdeploy.yaml
+kubectl get pods 
+kubectl get pods -o wide
+sudo nano wfcdeploy.yaml 
+kubectl delete -f wfcdeploy.yaml
+sudo nano wfcdeploy.yaml 
+sudo nano rebirth.sh 
+kubectl apply -f wfcdeploy.yaml --namespace=wfc
+sudo nano rebirth.sh 
+sudo nano wfcdeploy.yaml 
+psa
+killimg
+sudo docker image ls
+cd services
+ls
+cd distributor/
+sudo nano distributor.py 
+cd ..
+cd  ..
+ls
+sudo zip v15.zip -r pfropfen
+python3 -m http.server
+cd pfropfen
+rebirth
+kubectl apply -f wfcdeploy.yaml
+kubectl get pods
+kubectl delete -f wfcdeploy.yaml
+sudo nanp wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml --nodeport-addresses=192.168.1.0/24
+kubectl apply -f wfcdeploy.yaml --namespace=wfc
+kubectl apply -f wfcdeploy.yaml --namespace="wfc"
+kubectl create namespace wfc
+kubectl get namespaces
+kubectl apply -f wfcdeploy.yaml --namespace=wfc
+kubectl get pods
+kubectl get pods -o wide
+kubectl get pods --namespace=wfc
+sudo nano wfcdeploy.yaml 
+kubectl get svc
+kubectl get svc -o wide
+sudo nano wfcdeploy.yaml 
+kubectl delete -f wfcdeploy.yaml --namespace=wfc
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml
+kubectl get svc -o wide
+kubectl get pods
+kubectl get svc -o wide
+kubectl describe service wfcdistributor
+curl http://localhost:31001/
+curl http://localhost:31001
+curl http://localhost:31001/mapGenerator
+curl http://127.0.0.1:31001/
+curl http://127.0.0.1:31001/mapGenerator
+curl 10.10.162.114:5001
+kubectl get pods
+sudo nano wfcdeploy.yaml 
+kubectl delete -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl delete namespace wfc
+kubectl get namespaces
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods
+kubectl get pods -o wide
+kubectl get services
+curl http://localhost:31001
+curl http://192.168.1.93:31001
+curl https://192.168.1.93:31001
+kubectl apply -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml 
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml 
+kubectl get pods
+kubectl get pods -o wide
+kubectl get services
+kubectl svc
+kubectl get svc
+ifconfig
+sudo nano wfcdeploy.yaml 
+kubectl apply -f wfcdeploy.yaml 
+kubectl get services
+sudo nano wfcdeploy.yaml 
+kubectl get services
+kubectl get pods -o wide
+kubectl get services
+sudo nano wfcdeploy.yaml 
+kubectl delete --all deployments
+kubectl delete --all pods
+kubectl delete -f wfcdeploy.yaml 
+kubectl cluster-info
+kubectl get pods 
+kubectl create namespace wfc
+kubectl apply -f wfcdeploy.yaml --namespace=wfc
+kubectl get namespaces
+kubectl delete namespace wfc
+kubectl create namespace wfc2
+kubectl apply -f wfcdeploy.yaml --namespace=wfc2
+kubectl get pods -o wide --namespace=wfc
+kubectl get pods -o wide --namespace=wfc2
+kubectl describe pod wfcdistributor-deployment-7d766d6d7d-5mzpd
+kubectl describe pod wfcdistributor-deployment-7d766d6d7d-5mzpd --namespace=wfc2
+sudo nano k8install.sh
+python3 -m http.server
+shutdown now
