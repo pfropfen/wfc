@@ -6,3 +6,4 @@ sudo docker image rm -f $(sudo docker image ls)
 bash build.sh
 bash push.sh
 kubectl apply -f wfcdeploy.yaml
+

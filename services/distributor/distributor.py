@@ -4,6 +4,7 @@ import requests
 from flask import Flask, request, render_template, redirect
 import uuid
 import json
+import time
 
 
 app = Flask(__name__)
@@ -94,7 +95,13 @@ def distributeMap(map, numberOfParts):
 
 
 def generateMap():
-    rules = getRules()
+    while True:
+        try:
+            rules = getRules()
+            break
+        except:
+            print("Connection Failed")
+            time.sleep(60)
     wave.numberOfTiles = rules["numberOfTiles"]
     wave.entropyTolerance = rules["entropyTolerance"]
     fullMap = setMap(rules["numberOfTiles"])

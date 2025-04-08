@@ -101,7 +101,7 @@ spec:
   - port: 5000
     name: wfcmanagerport
     targetPort: 5000
-    nodePort: 30000
+    nodePort: 31000
   selector:
     app: wfcmanager
 ---
@@ -143,7 +143,7 @@ spec:
     name: distributorport
     protocol: TCP
     targetPort: 5001
-    nodePort: 30001
+    nodePort: 31001
   selector:
     app: wfcdistributor
 ---
@@ -184,7 +184,7 @@ spec:
   - port: 5002
     name: wfchubport
     targetPort: 5002
-    nodePort: 30002
+    nodePort: 31002
   selector:
     app: wfchub
 ---

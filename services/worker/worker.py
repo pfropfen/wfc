@@ -5,7 +5,6 @@ import requests
 import uuid
 
 
-
 huburl = "http://wfchub:5002"
 rabbithost = "wfcrabbit"
 

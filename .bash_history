@@ -1402,3 +1402,113 @@ kubectl apply -f wfcdeploy.yaml
 kubectl get pods -o wide
 kubectl delete -f wfcdeploy.yaml
 shutdown now
+cd services
+ls
+cd distributor/
+lx
+ls
+sudo nano distributor.py
+cd ../..
+ls
+cd ..
+ls
+zip pfropfen
+zip /pfropfen
+zip v14.zip /pfropfen 
+zip pfropfen.zip /pfropfen 
+zip v14.zip /pfropfen/* 
+ls
+zip v14.zip pfropfen
+sudo zip v14.zip pfropfen
+ls
+python3 -m http.server
+sudo rm v14.zip
+ls
+sudo zip v14.zip ./pfropfen
+python3 -m http.server
+ls
+sudo rm v14.zip 
+sudo zip -r v14.zip pfropfen
+python3 -m http.server
+cd pfropfen/services/distributor/
+ls
+sudo nano distributor.py 
+ls
+sudo nano wave.py
+ls
+sudo nano wavefunctionlookup.py 
+sudo nano wave.py
+ls
+cd ..
+ls
+cd hub
+ls
+sudo nano hub.py 
+ls
+cd ..
+ls
+cd worker
+sudo nano worker.py 
+cd ..
+cd distributor/
+sudo nano distributor.py 
+sudo nano wave.py
+cd ..
+cd worker
+sudo nano wave.py
+s
+ls
+cd ..
+ls
+cd ..
+kubectl get nodes
+psa
+kubectl get pods
+kubectl get pods -A
+ls
+rebirth
+kubectl get pods
+kubectl logs wfchub-dep
+kubectl logs wfchub-deployment-c9f57b5b7-6h44j
+kubectl get pods
+kubectl logs wfcworker-deployment-698b57bc79-7k2zr
+cd services
+cd distributor/
+sudo nano distributor.py 
+sudo nano wave.py
+cd ..
+cd worker
+sudo nano worker.py 
+sudo nano wave.py 
+rebirth
+cd ..
+rebirth
+kubectl get pods
+kubectl logs wfcworker-deployment-698b57bc79-hdlkz
+cd services/worker
+sudo nano worker.py 
+sudo nano wave.py 
+ls
+cd ..
+ls
+cd ..
+ls
+sudo nano build.sh
+sudo nano push.sh
+kubectl get pods
+sudo nano rebirth.sh
+kubectl get pods
+bash push.sh
+kubectl get pods
+sudo nano wfcdeploy.yaml 
+ifconfig
+kubectl get pods
+kubectl logs wfcdistributor-deployment-7d766d6d7d-rjqf8
+kubectl desrcibe wfcdistributor-deployment-7d766d6d7d-rjqf8
+kubectl describe wfcdistributor-deployment-7d766d6d7d-rjqf8
+kubectl get pods
+kubectl describe wfcdistributor-deployment-7d766d6d7d-rjqf8
+kubectl logs wfcdistributor-deployment-7d766d6d7d-rjqf8
+brc
+kubectl delete -f wfcdeploy.yaml
+shutdown now

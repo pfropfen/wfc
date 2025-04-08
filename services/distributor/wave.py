@@ -1,7 +1,14 @@
 import random
 import wavefunctionlookup as wfl
+import time
 
-wfl.requestRestrictions()
+# GET RESTRICTIONS
+while True:
+    try:
+        wfl.requestRestrictions()
+    except:
+        print("Connection Failed")
+        time.sleep(60)
 
 numberOfTiles = (-1,-1)
 entropyTolerance = -1
