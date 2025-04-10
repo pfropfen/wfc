@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v17 work on deployment
 v16 added scripts for k8s install and config for master and node
 v15 work on k8s deployment, changed rebirth script, k8s config
 v14 work on k8s deployment, added rebirth script

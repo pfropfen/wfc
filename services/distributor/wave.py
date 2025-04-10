@@ -6,6 +6,7 @@ import time
 while True:
     try:
         wfl.requestRestrictions()
+        break
     except:
         print("Connection Failed")
         time.sleep(60)

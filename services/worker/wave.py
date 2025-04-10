@@ -1,11 +1,13 @@
 import random
 import wavefunctionlookup as wfl
+import time
 
 
 # GET RESTRICTIONS
 while True:
     try:
         wfl.requestRestrictions()
+        break
     except:
         print("Connection Failed")
         time.sleep(60)
