@@ -3,8 +3,8 @@ import requests
 import visualization
 
 
-
-huburl = "http://localhost:5002"
+# change localhost to any node IP
+huburl = "http://localhost:31002"
 
 mapID = "-1"
 

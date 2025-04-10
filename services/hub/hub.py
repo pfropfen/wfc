@@ -16,9 +16,9 @@ sqlUpdateChunk = "UPDATE mapchunks SET content = %s, computed = 1 WHERE chunkID 
 sqlMapByID = "SELECT locationX,locationY,content FROM mapchunks WHERE mapID = %s;"
 
 # RABBITMQ CONNECTION
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
-channel = connection.channel()
-channel.queue_declare(queue='maptickets', durable=True)
+#connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
+#channel = connection.channel()
+#channel.queue_declare(queue='maptickets', durable=True)
 
 
 
@@ -60,6 +60,10 @@ def updateChunk():
 
 @app.route("/saveChunks", methods=["POST"])
 def saveChunks():
+    # RABBIT CONNECTION
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
+    channel = connection.channel()
+    channel.queue_declare(queue='maptickets', durable=True)
     # DB CONNECTION
     database = mysql.connector.connect(host=dbhost, database="maps", user="root", password="root")
     dbCursor = database.cursor()
@@ -72,6 +76,8 @@ def saveChunks():
     dbCursor.executemany(sqlInsert, valuesToInsert)
     database.commit()
     database.disconnect()
+    channel.close() # close rabbit channel
+    connection.close() # close rabbit connection
     print(dbCursor.rowcount)
     print("saved set of chunks in db")
     return "done"
