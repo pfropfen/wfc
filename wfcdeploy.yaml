@@ -5,8 +5,13 @@ metadata:
   labels:
     app: timedb
 spec:
+  type: NodePort
   ports:
   - port: 3306
+    name: dtimedbport
+    protocol: TCP
+    targetPort: 3306
+    nodePort: 31006
   selector:
     app: timedb
 ---
@@ -32,10 +37,10 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/mnt/data"  # Change this path as needed
+    path: "/mnt/data"  # volume location
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: timedb-deployment
 spec:

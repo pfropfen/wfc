@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v22 volume managing
 v21 updateMapTime for TimeKeeper, volume managing
 v20 STABLE (last bugfixes)
 v19 work on k8s config and yaml

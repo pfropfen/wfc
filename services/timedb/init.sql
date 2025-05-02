@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS mapTimes (
 	mapSize INT,
 	chunkCount INT,
 	numberOfWorkers INT,
-	startTime TIMESTAMP,
-	endTime TIMESTAMP,
+	startTime DATETIME(3),
+	endTime DATETIME(3),
 	totalDuration INT,
 	PRIMARY KEY (mapID)
 	);
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS mapTimes (
 CREATE TABLE IF NOT EXISTS chunkTimes (
 	mapID VARCHAR(36),
 	chunkID VARCHAR(36),
-	startTime TIMESTAMP,
-	endTime TIMESTAMP,
+	startTime DATETIME(3),
+	endTime DATETIME(3),
 	chunkDuration INT,	
 	PRIMARY KEY (mapID, chunkID),
 	FOREIGN KEY (mapID) REFERENCES mapTimes(mapID)
