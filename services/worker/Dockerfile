@@ -1,4 +1,4 @@
 FROM python:alpine3.19
+RUN pip install requests pika pandas
 ADD . .
-RUN pip install requests pika pandas 
 CMD ["python", "worker.py"]

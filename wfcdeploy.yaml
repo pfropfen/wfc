@@ -1,6 +1,81 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: timedb
+  labels:
+    app: timedb
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: timedb
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timedb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: timedb-storage
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/data"  # Change this path as needed
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timedb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timedb
+  template:
+    metadata:
+      labels:
+        app: timedb
+    spec:
+      volumes:
+        - name: timedb-storage
+          persistentVolumeClaim:
+            claimName: timedb-pvc
+      containers:
+        - name: timedb-container
+          image: pfropfen/imgtimedb
+          imagePullPolicy: Always
+          env:
+            - name: MYSQL_ROOT_USER
+              value: "root"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_USER
+              value: "wfc"
+            - name: MYSQL_PASSWORD
+              value: "wfc"
+            - name: MYSQL_DATABASE
+              value: "times"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: timedb-storage
+---
+apiVersion: v1
+kind: Service
+metadata:
   #annotations:
     #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfcdb
@@ -253,4 +328,43 @@ spec:
         - containerPort: 5003
 #      imagePullSecrets:
 #        - name: dockerauth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: wfctimekeeper
+  labels:
+    app: wfctimekeeper
+spec:
+  type: NodePort
+  ports:
+  - port: 6002
+    name: wfctimekeeperport
+    targetPort: 6002
+    nodePort: 32002
+  selector:
+    app: wfctimekeeper
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wfctimekeeper-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wfctimekeeper
+  template:
+    metadata:
+      labels:
+        app: wfctimekeeper
+    spec:
+      containers:
+      - name: wfctimekeeper-container
+        image: pfropfen/imgtimekeeper
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6002
 

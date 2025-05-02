@@ -44,14 +44,15 @@ def initializeTiles(scaleValue):
     bergschneeImg = pygame.transform.scale(pygame.image.load("TILES/bergschnee.png"), scaleValue)
     schneemannImg = pygame.transform.scale(pygame.image.load("TILES/schneemann.png"), scaleValue)
 
-def selectImage(tile):
+
+def selectImage(tile, scaleValue):
     if (numberOfOnes(tile) > 1):
         canvas = pygame.Surface(scaleValue,pygame.SRCALPHA)
         canvas.fill((255,255,255,255))
 
         for e in range (0,8):
             if (tile&(2**e) != 0):
-                tempImg = selectImage(2**e).copy()
+                tempImg = selectImage(2**e, scaleValue).copy()
                 tempImg.set_alpha(128)
                 canvas.blit(tempImg,(0,0),special_flags=pygame.BLEND_RGBA_MULT)
         return canvas
@@ -89,7 +90,7 @@ def showmap(mapdata):
         # RENDER YOUR GAME HERE
         for y in range (0,len(mapdata[0])):
             for x in range (0,len(mapdata)):
-                screen.blit(selectImage(mapdata[y][x]),(scaleValue[0]*x,scaleValue[1]*y))
+                screen.blit(selectImage(mapdata[y][x], scaleValue),(scaleValue[0]*x,scaleValue[1]*y))
         # flip() the display to put your work on screen
         pygame.display.flip()
 

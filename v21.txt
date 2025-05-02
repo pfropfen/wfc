@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v21 updateMapTime for TimeKeeper, volume managing
 v20 STABLE (last bugfixes)
 v19 work on k8s config and yaml
 v18 work on deployment and k8s config, changed build script
@@ -15,3 +16,4 @@ v10 added maploader service
 v09 bugfixes for hub service
 v08 added db for hub service
 v07 added test service for hub
+

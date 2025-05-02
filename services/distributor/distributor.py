@@ -5,12 +5,17 @@ from flask import Flask, request, render_template, redirect
 import uuid
 import json
 import time
+from datetime import datetime
+#import logging
 
 
 app = Flask(__name__)
 
+#logging.basicConfig(level=logging.DEBUG)
+
 huburl = "http://wfchub:5002"
 managerurl = "http://wfcmanager:5000"
+timekeeperurl = "http://wfctimekeeper:6002"
 
 @app.route("/")
 def showHome():
@@ -23,22 +28,36 @@ def mapGenerator():
         return render_template('distributor.html')+"\n<H1>"+ mapuuid +"</H1>"
     elif request.method == 'GET':
         return render_template('distributor.html')
-
-
-
+    
 
 def getRules():
     # GET RULES
+    #logging.debug("-> getting numberOfTiles..")
+    print("-> getting numberOfTiles..")
     numberOfTilesResponse = requests.get(managerurl+"/numberOfTiles").json()
-    numberOfPartsResponse = requests.get(managerurl+"/numberOfParts").json()
-    entropyToleranceResponse = requests.get(managerurl+"/entropyTolerance").json()
-
     numberOfTiles = (numberOfTilesResponse[0],numberOfTilesResponse[1])
+    #logging.debug("numberOfTiles: "+str(numberOfTiles))
+    print("numberOfTiles: ", numberOfTiles)
+    #logging.debug("-> getting numberOfParts..")
+    print("-> getting numberOfParts..")
+    numberOfPartsResponse = requests.get(managerurl+"/numberOfParts").json()
     numberOfParts = numberOfPartsResponse
+    #logging.debug("numberOfParts: "+str(numberOfParts))
+    print("numberOfParts: ", numberOfParts)
+    #logging.debug("-> getting entropyTolerance..")
+    print("-> getting entropyTolerance..")
+    entropyToleranceResponse = requests.get(managerurl+"/entropyTolerance").json()
     entropyTolerance = entropyToleranceResponse
-    
-    return {"numberOfTiles":numberOfTiles, "numberOfParts":numberOfParts, "entropyTolerance":entropyTolerance}
+    #logging.debug("entropyTolerance: "+str(entropyTolerance))
+    print("entropyTolerance: ", entropyTolerance)
+    #logging.debug("-> getting numberOfWorkers..")
+    print("-> getting numberOfWorkers..")
+    numberOfWorkersResponse = requests.get(managerurl+"/numberOfWorkers").json()
+    numberOfWorkers = numberOfWorkersResponse
+    #logging.debug("numberOfWorkers: "+str(numberOfWorkers))
+    print("numberOfWorkers: ", numberOfWorkers)
 
+    return {"numberOfTiles":numberOfTiles, "numberOfParts":numberOfParts, "entropyTolerance":entropyTolerance, "numberOfWorkers":numberOfWorkers}
 
 
 def setMap(t):
@@ -97,11 +116,17 @@ def distributeMap(map, numberOfParts):
 def generateMap():
     while True:
         try:
+        #logging.debug("getting rules")
+            print("getting rules")
             rules = getRules()
+            print("rules: ", rules)
+            print("")
             break
         except:
             print("Connection Failed")
             time.sleep(60)
+    #logging.debug("connection success")
+    print("connection success")
     wave.numberOfTiles = rules["numberOfTiles"]
     wave.entropyTolerance = rules["entropyTolerance"]
     fullMap = setMap(rules["numberOfTiles"])
@@ -116,8 +141,21 @@ def generateMap():
         for y in range(0,len(mapChunks)):
             data.append({"mapID":mapID,"chunkID":str(uuid.uuid4()),"locX":x,"locY":y,"entropyTolerance":rules["entropyTolerance"],"content":mapChunks[y][x]})
     obj = json.dumps(data)
+    print("OBJECT CONTENT: ", obj)
     result = requests.post(huburl+"/saveChunks", json=obj)
     
+    #SEND DATA TO TIME KEEPER
+    print("getting startTime..")
+    startTime = datetime.now()
+    startTime = startTime.isoformat()
+    print("getting map info..")
+    tdata = {"mapID":mapID,"mapSize":rules["numberOfTiles"][0],"chunkCount":rules["numberOfParts"],"numberOfWorkers":rules["numberOfWorkers"],"startTime":startTime,"endTime":None,"totalDuration":None}       
+    tobj = json.dumps(tdata)
+    print("TIME OBJECT CONTENT: ", tobj)
+    print("sending data to timekeeper..")
+    result = requests.post(timekeeperurl+"/saveMapTime", json=tobj)
+    print("done.")
+    print("")
     return mapID
         
         

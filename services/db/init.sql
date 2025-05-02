@@ -7,5 +7,7 @@ CREATE TABLE IF NOT EXISTS mapchunks (
 	locationY INT,
 	entropyTolerance INT,
 	content JSON,
-	computed BOOLEAN);
+	computed BOOLEAN,
+	PRIMARY KEY (mapID, chunkID)
+	);
 

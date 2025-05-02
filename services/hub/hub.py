@@ -15,6 +15,7 @@ sqlGetByTicketID = "SELECT * FROM mapchunks WHERE chunkID = %s;"
 sqlUpdateChunk = "UPDATE mapchunks SET content = %s, computed = 1 WHERE chunkID = %s;"
 sqlMapByID = "SELECT locationX,locationY,content FROM mapchunks WHERE mapID = %s;"
 
+
 # RABBITMQ CONNECTION
 #connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
 #channel = connection.channel()
@@ -31,6 +32,8 @@ app = Flask(__name__)
 @app.route("/")
 def showHome():
     return "HUB SERVICE FOR SAVING MAPCHUNKS"
+
+
 
 
 @app.route("/saveChunk", methods=["POST"])

@@ -1,12 +1,38 @@
 import pandas as pd
 import flask
+#import logging
 
 app = flask.Flask(__name__)
 
-numberOfTiles = (0,0)
+#logging.basicConfig(level=logging.DEBUG)
+
+#numberOfTiles = (0,0)
+
+# MANAGER
+
+
+
+# READ RULES
+data = pd.read_excel("rules.xlsx", usecols="B")
+
+numberOfTiles = (int(data.values[0][0]),int(data.values[1][0]))
+numberOfParts = int(data.values[2][0])
+entropyTolerance = int(data.values[3][0])
+numberOfWorkers = int(data.values[4][0])
+
+#logging.logger.debug("numberOfTiles: "+str(numberOfTiles))
+#logging.logger.debug("numberOfParts: "+str(numberOfParts))
+#logging.logger.debug("entropyTolerance: "+str(entropyTolerance))
+#logging.logger.debug("numberOfWorkers: "+str(numberOfWorkers))
+print("numberOfTiles: ", numberOfTiles)
+print("numberOfParts: ", numberOfParts)
+print("entropyTolerance: ", entropyTolerance)
+print("numberOfWorkers: ", numberOfWorkers)
+
+
 @app.route("/")
 def showRules():
-    return flask.jsonify({"numberOfTiles: ": numberOfTiles, "numberOfParts: ": numberOfParts, "entropyTolerance: ": entropyTolerance})
+    return flask.jsonify({"numberOfTiles: ": numberOfTiles, "numberOfParts: ": numberOfParts, "entropyTolerance: ": entropyTolerance, "numberOfWorkers: ": numberOfWorkers})
     
 @app.route("/numberOfTiles")
 def getNumberOfTiles():
@@ -20,22 +46,13 @@ def getNumberOfParts():
 def getEntropyTolerance():
     return flask.jsonify(entropyTolerance)
     
+@app.route("/numberOfWorkers")
+def getNumberOfWorkers():
+    return flask.jsonify(numberOfWorkers)
+    
 @app.route("/restrictions")
 def getRestrictions():
     return flask.jsonify((tileCompatibilityList,tileCompatibilityLookUpTable,binaryLookUpTable))
-
-
-
-# MANAGER
-
-
-
-# READ RULES
-data = pd.read_excel("rules.xlsx", usecols="B")
-
-numberOfTiles = (int(data.values[0][0]),int(data.values[1][0]))
-numberOfParts = int(data.values[2][0])
-entropyTolerance = int(data.values[3][0])
 
 
 
