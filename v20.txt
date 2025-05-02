@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v20 STABLE (last bugfixes)
 v19 work on k8s config and yaml
 v18 work on deployment and k8s config, changed build script
 v17 work on deployment

@@ -2,9 +2,10 @@ import os
 import requests
 import visualization
 
+HUBADDR = "192.168.178.56"
+HUBPORT = "31002"
 
-# change localhost to any node IP
-huburl = "http://localhost:31002"
+huburl = "http://"+HUBADDR+":"+HUBPORT+"/"
 
 mapID = "-1"
 
