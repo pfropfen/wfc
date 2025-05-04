@@ -1,0 +1,103 @@
+
+NOTES v24:
+zeitmessungen, set rules
+
+
+------------------------------
+v19
+sudo tail -n 2 token.sh > jointoken.sh
+
+
+MASTER NODE:
+git clone https://github.com/pfropfen/wfc_old.git
+sudo bash k8master.sh
+
+python3.py -m http.server
+
+
+kubectl apply -f wfcdeploy.yaml
+kubectl delete -f wfcdeploy.yaml
+NUR NACH ÄNDERUNG: sudo bash rebirth.sh
+
+
+
+
+WORKER NODE:
+git clone https://github.com/pfropfen/wfc_old.git
+sudo bash k8node.sh
+
+curl [MASTER-IP]:8000/jointoken.sh > jointoken.sh
+sudo bash jointoken.sh
+
+
+
+
+
+DISTRIBUTOR:
+http://192.168.178.56:31001/mapGenerator
+
+HUB:
+31002
+
+MANAGER:
+http://192.168.178.56:31000/setRules
+
+
+
+
+
+PORTS:
+------
+timekeeper: 6002 (nodePort: 32002)
+db: 3306
+timedb: 3306  nodeport: 31006
+manager: 5000   nodePort: 31000
+
+
+
+
+
+
+
+------------------------------------------------------------------
+LIMITATIONS:
+map immer quadratisch aus praktischen gründen
+
+
+
+
+
+
+TODO:
+-----
+SET RULES FÜR MANAGER
+
+STRETCH GOAL: NAS SERVICE VOLUME SHIT
+-> 1 node mit custom label, timedb nur darauf starten
+
+RIESIGE PRINTS ENTFERNEN!!
+
+EVALUTION: maps teilen in 2er oder 3er systemen.. zahlen wählen die möglichst niedrige potenz hat?
+           was kann alles evaluiert werden?
+
+k^2/p element von N (natürliche zahlen)
+(k= kantenlänge, p= anzahl parts)
+p muss teil der menge der kombination der primfaktorisierung des quadrates der zahl sein
+
+
+
+NOTES:
+------
+lastChunkEndTime, mapStartTime, chunkStartTime,....  wenn komplexität steigt, werden sprechende bezeichnungen und so immer wichtiger
+die prinzipien die man im studium gelernt hat werden tatsächlich irgendwann nützlich
+
+für das dokument: verwendete libraries -> pandas, openpyxl, ...
+
+DOCKERFILE geändert -> ADD . . nach RUN..  für deutlich bessere performance!
+
+-> volume wird immer woanders gestartet, änderung auf StatefulSet 
+jetzt immer auf vm2
+
+GET DATA FROM TIMEDB -> CSV/EXCEL
+
+
