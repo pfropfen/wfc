@@ -6,6 +6,9 @@ import uuid
 from datetime import datetime
 
 
+# WORKER SERVICE
+
+# URLs
 huburl = "http://wfchub:5002"
 timekeeperurl = "http://wfctimekeeper:6002"
 rabbithost = "wfcrabbit"
@@ -21,8 +24,6 @@ channel.queue_declare(queue='maptickets', durable=True)
 def sendChunkTimes(mapID, chunkID, startTime, endTime, chunkDuration):
     print("Sending Times to Time Keeper...")
     result = requests.post(timekeeperurl+"/saveChunkTime", json = json.dumps({"mapID":mapID, "chunkID":chunkID, "startTime":startTime.isoformat(), "endTime":endTime.isoformat(), "chunkDuration":chunkDuration}))
-    print("Result: ", result)
-    print("") 
     print("Done")
     print("")
     
@@ -31,16 +32,12 @@ def callback(ch, method, properties, body):
     print("[message received]")
     finished = False
     print("[request ticket]")
-    print("BODY DECODED: ", body.decode())
     chunk = requests.get(huburl+"/getMapChunkByChunkID/"+body.decode())
     print("[set map]")
     chunk = json.loads(chunk.content.decode())
     mapID = chunk[0]
     chunkID = chunk[1]
-    print("CHUNK CONTENT: ", chunk)
-    print("CHUNK5 CONTENT: ", chunk[5])
     mapdata = json.loads(chunk[5])
-
 
     startTime = datetime.now()
     wave.map = mapdata
@@ -55,7 +52,6 @@ def callback(ch, method, properties, body):
     print("[finished]")
     
     result = requests.post(huburl+"/updateChunkByID", json = json.dumps({"chunkID":body.decode(),"content":wave.map}))
-    print("Result: ", result)
     
     endTime = datetime.now()
     # calculate chunkDuration

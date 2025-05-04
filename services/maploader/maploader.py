@@ -24,7 +24,6 @@ def showmenu():
 
 mapID = showmenu()
 fullmap = requests.get(huburl+"/getMapByID/"+mapID).json()
-print("Fullmap: ", fullmap)
 
 visualization.showmap(fullmap)
 

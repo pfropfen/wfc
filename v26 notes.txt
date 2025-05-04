@@ -1,6 +1,6 @@
 
-NOTES v25:
-stable
+NOTES v26:
+aufräumen, große prints raus, unnötige dateien raus
 
 
 TODOs siehe unten
@@ -21,6 +21,13 @@ kubectl delete -f wfcdeploy.yaml
 NUR NACH ÄNDERUNG: sudo bash rebirth.sh
 
 
+
+VM LOGIN:
+vm  user    pw
+--------------
+vm  vm0     nature
+vm1 vm1     nature
+vm2 vm2     nature
 
 
 WORKER NODE:
@@ -71,7 +78,6 @@ map immer quadratisch aus praktischen gründen
 
 TODO:
 -----
-SET RULES FÜR MANAGER
 
 STRETCH GOAL: NAS SERVICE VOLUME SHIT
 -> 1 node mit custom label, timedb nur darauf starten
@@ -85,6 +91,7 @@ k^2/p element von N (natürliche zahlen)
 (k= kantenlänge, p= anzahl parts)
 p muss teil der menge der kombination der primfaktorisierung des quadrates der zahl sein
 
+UIs schöner machen
 
 
 NOTES:

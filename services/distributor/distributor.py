@@ -6,17 +6,16 @@ import uuid
 import json
 import time
 from datetime import datetime
-#import logging
 
 
 app = Flask(__name__)
 
-#logging.basicConfig(level=logging.DEBUG)
-
+# URLs
 huburl = "http://wfchub:5002"
 managerurl = "http://wfcmanager:5000"
 timekeeperurl = "http://wfctimekeeper:6002"
 
+# DISTRIBUTOR SERVICE PATHS
 @app.route("/")
 def showHome():
     return "SERVICE FOR DISTRIBUTING MAPS"
@@ -31,47 +30,32 @@ def mapGenerator():
     
 
 def getRules():
-    # GET RULES
-    #logging.debug("-> getting numberOfTiles..")
-    print("-> getting numberOfTiles..")
+    # request rules from manager service
     numberOfTilesResponse = requests.get(managerurl+"/numberOfTiles").json()
     numberOfTiles = (numberOfTilesResponse[0],numberOfTilesResponse[1])
-    #logging.debug("numberOfTiles: "+str(numberOfTiles))
     print("numberOfTiles: ", numberOfTiles)
-    #logging.debug("-> getting numberOfParts..")
-    print("-> getting numberOfParts..")
     numberOfPartsResponse = requests.get(managerurl+"/numberOfParts").json()
     numberOfParts = numberOfPartsResponse
-    #logging.debug("numberOfParts: "+str(numberOfParts))
     print("numberOfParts: ", numberOfParts)
-    #logging.debug("-> getting entropyTolerance..")
-    print("-> getting entropyTolerance..")
     entropyToleranceResponse = requests.get(managerurl+"/entropyTolerance").json()
     entropyTolerance = entropyToleranceResponse
-    #logging.debug("entropyTolerance: "+str(entropyTolerance))
     print("entropyTolerance: ", entropyTolerance)
-    #logging.debug("-> getting numberOfWorkers..")
-    print("-> getting numberOfWorkers..")
     numberOfWorkersResponse = requests.get(managerurl+"/numberOfWorkers").json()
     numberOfWorkers = numberOfWorkersResponse
-    #logging.debug("numberOfWorkers: "+str(numberOfWorkers))
     print("numberOfWorkers: ", numberOfWorkers)
 
     return {"numberOfTiles":numberOfTiles, "numberOfParts":numberOfParts, "entropyTolerance":entropyTolerance, "numberOfWorkers":numberOfWorkers}
 
 
 def setMap(t):
-    # SET MAP
+    # sets an empty map with t*t size
     fullMap = [[0b111111111 for x in range(0,t[0])] for y in range(0,t[1])]
     return fullMap
 
 
 
-
-    
-
-
 def distributeMap(map, numberOfParts):
+    # divides map in numberOfParts (chunks), calculates the borders of the chunks
     divisions = int(math.sqrt(numberOfParts))
     mapChunks = []
     for i in range (0,divisions):
@@ -107,16 +91,15 @@ def distributeMap(map, numberOfParts):
     for x in range (0,len(map[0])):
         for y in range (0,len(map)):
             mapChunks[int(y/(len(map)/divisions))][int(x/(len(map[0])/divisions))][y%int(len(map)/divisions)][x%int(len(map[0])/divisions)] = map[y][x]
-    #wave.prettyPrintMap(mapChunks[0][0])
-    #print("MAPCHUNKS: ",mapChunks)
     return mapChunks    
 
 
 
 def generateMap():
+    # connects to manager service to get the current rule set.
+    # creates and distributes a map and sends it to huib service.
     while True:
         try:
-        #logging.debug("getting rules")
             print("getting rules")
             rules = getRules()
             print("rules: ", rules)
@@ -124,8 +107,7 @@ def generateMap():
             break
         except:
             print("Connection Failed")
-            time.sleep(60)
-    #logging.debug("connection success")
+            time.sleep(30)
     print("connection success")
     wave.numberOfTiles = rules["numberOfTiles"]
     wave.entropyTolerance = rules["entropyTolerance"]
@@ -135,14 +117,15 @@ def generateMap():
     
     # SEND PARTS TO HUB
     data = []
-    mapID = str(uuid.uuid4())
-
+    mapID = str(uuid.uuid4())  # generate mapID
+    print("sending chunks to hub..")
     for x in range(0,len(mapChunks[0])):
         for y in range(0,len(mapChunks)):
             data.append({"mapID":mapID,"chunkID":str(uuid.uuid4()),"locX":x,"locY":y,"entropyTolerance":rules["entropyTolerance"],"content":mapChunks[y][x]})
     obj = json.dumps(data)
-    print("OBJECT CONTENT: ", obj)
     result = requests.post(huburl+"/saveChunks", json=obj)
+    print("done.")
+    print("")
     
     #SEND DATA TO TIME KEEPER
     print("getting startTime..")
@@ -151,7 +134,6 @@ def generateMap():
     print("getting map info..")
     tdata = {"mapID":mapID,"mapSize":rules["numberOfTiles"][0],"chunkCount":rules["numberOfParts"],"numberOfWorkers":rules["numberOfWorkers"],"startTime":startTime,"endTime":None,"totalDuration":None}       
     tobj = json.dumps(tdata)
-    print("TIME OBJECT CONTENT: ", tobj)
     print("sending data to timekeeper..")
     result = requests.post(timekeeperurl+"/saveMapTime", json=tobj)
     print("done.")

@@ -2,25 +2,12 @@ import pygame
 import wavefunctionlookup as wfl
 from wave import numberOfOnes
 
-# pygame setup
 
 displaySizeX = 512
 displaySizeY = 512
 
 wfl.requestRestrictions()
 
-
-
-
-#grassImg = pygame.image.load("TILES/grass.png")
-#waldImg = pygame.image.load("TILES/wald.png")
-#kuhImg = pygame.image.load("TILES/kuh.png")
-#strandImg = pygame.image.load("TILES/strand.png")
-#wasserImg = pygame.image.load("TILES/wasser.png")
-#fischImg = pygame.image.load("TILES/fisch.png")
-#bergImg = pygame.image.load("TILES/berg.png")
-#bergschneeImg = pygame.image.load("TILES/bergschnee.png")
-#schneemannImg = pygame.image.load("TILES/schneemann.png")
 
 def initializeTiles(scaleValue):
     global tileImg
@@ -68,7 +55,6 @@ def selectImage(tile, scaleValue):
     if (tile&wfl.binaryLookUpTable["schneemann"] != 0): return schneemannImg
 
 
-#wave.map = dist.distributeMap(wave.map, dist.numberOfParts)
 def showmap(mapdata):
     pygame.init()
     screen = pygame.display.set_mode((displaySizeX, displaySizeY))
@@ -79,21 +65,15 @@ def showmap(mapdata):
     while running:
         clock.tick(60)  # limits FPS to 60
         
-        # poll for events
-        # pygame.QUIT event means the user clicked X to close your window
+        # polls for events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        # fill the screen with a color to wipe away anything from last frame
+        # fills the screen with a color
         screen.fill("white")
 
-        # RENDER YOUR GAME HERE
+        # RENDERING
         for y in range (0,len(mapdata[0])):
             for x in range (0,len(mapdata)):
                 screen.blit(selectImage(mapdata[y][x], scaleValue),(scaleValue[0]*x,scaleValue[1]*y))
-        # flip() the display to put your work on screen
         pygame.display.flip()
-
-    
-
-#pygame.quit()

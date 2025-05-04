@@ -1,12 +1,8 @@
 import pandas as pd
 from flask import Flask, request, render_template, redirect, jsonify
-#import logging
 
 app = Flask(__name__)
 
-#logging.basicConfig(level=logging.DEBUG)
-
-#numberOfTiles = (0,0)
 
 # MANAGER
 
@@ -20,16 +16,13 @@ app.config["numberOfParts"] = int(data.values[2][0])
 app.config["entropyTolerance"] = int(data.values[3][0])
 app.config["numberOfWorkers"] = int(data.values[4][0])
 
-#logging.logger.debug("numberOfTiles: "+str(numberOfTiles))
-#logging.logger.debug("numberOfParts: "+str(numberOfParts))
-#logging.logger.debug("entropyTolerance: "+str(entropyTolerance))
-#logging.logger.debug("numberOfWorkers: "+str(numberOfWorkers))
 print("numberOfTiles: ", app.config["numberOfTiles"])
 print("numberOfParts: ", app.config["numberOfParts"])
 print("entropyTolerance: ", app.config["entropyTolerance"])
 print("numberOfWorkers: ", app.config["numberOfWorkers"])
 
 
+# MANAGER SERVICE PATHS
 
 @app.route("/")
 def showRules():
@@ -38,12 +31,12 @@ def showRules():
 @app.route('/setRules', methods=['GET', 'POST'])
 def showHome():
     if request.method == 'POST':
-        # aktualisierten Werte verarbeiten
+        # processing current values
         app.config["numberOfTiles"] = int(request.form.get('var1'))
         app.config["numberOfParts"] = int(request.form.get('var2'))
         app.config["entropyTolerance"] = int(request.form.get('var3'))
         app.config["numberOfWorkers"] = int(request.form.get('var4'))
-        # Werte speichern oder weiterverarbeiten
+        # save or process values
         return render_template('manager.html', var1=app.config["numberOfTiles"], var2=app.config["numberOfParts"], var3=app.config["entropyTolerance"], var4=app.config["numberOfWorkers"])
     return render_template('manager.html', var1=app.config["numberOfTiles"], var2=app.config["numberOfParts"], var3=app.config["entropyTolerance"], var4=app.config["numberOfWorkers"])
 

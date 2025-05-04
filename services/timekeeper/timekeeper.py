@@ -19,6 +19,8 @@ sqlGetChunkEndTimes = "SELECT endTime FROM chunkTimes WHERE mapID = %s;"
 
 app = Flask(__name__)
 
+# TIMEKEEPER SERVICE PATHS
+
 @app.route("/")
 def showHome():
     return "TIME KEEPER SERVICE"
@@ -31,7 +33,6 @@ def isMapComplete(ID):
     
     dbCursor.execute(sqlCheckMapByID, (str(ID),))
     result = dbCursor.fetchall()
-    print("RESULT: ", result)
     database.disconnect()
     
     completed = True
@@ -51,7 +52,6 @@ def saveMapTime():
     valuesToInsert = (data["mapID"], data["mapSize"], data["chunkCount"], data["numberOfWorkers"], startTime, data["endTime"], data["totalDuration"])
     dbCursor.execute(sqlMapInsert, valuesToInsert)
     database.commit()
-    print(dbCursor.rowcount)
     print("saved maptime in db")
     database.disconnect()
     return "done"
@@ -70,10 +70,7 @@ def updateMapTime(mapID, endTime):
     valuesToUpdate = (endTime, totalDuration, mapID)
     dbCursor.execute(sqlUpdate, valuesToUpdate)
     database.commit()
-    print(dbCursor.rowcount)
     print("maptime updated")
-    #else:
-        #print("row not found")
     database.disconnect()
     return "done"
     
@@ -85,7 +82,6 @@ def saveChunkTime():
     valuesToInsert = (data["mapID"], data["chunkID"], datetime.fromisoformat(data["startTime"]), datetime.fromisoformat(data["endTime"]), data["chunkDuration"])
     dbCursor.execute(sqlChunkInsert, valuesToInsert)
     database.commit()
-    print(dbCursor.rowcount)
     print("saved chunktime in db")
     database.disconnect()
     
@@ -94,8 +90,6 @@ def saveChunkTime():
         dbCursor = database.cursor()
         dbCursor.execute(sqlGetChunkEndTimes, (data["mapID"],))
         resultChunkEndTimes = dbCursor.fetchall()
-        print("EndTimes: ", resultChunkEndTimes)
-        print("")
 
         lastChunkEndTime = datetime.min
         for endTime in resultChunkEndTimes:
@@ -103,6 +97,5 @@ def saveChunkTime():
                 lastChunkEndTime = endTime[0]
         
         database.disconnect()
-        updateMapTime(data["mapID"], lastChunkEndTime)
-        
+        updateMapTime(data["mapID"], lastChunkEndTime) 
     return "done"

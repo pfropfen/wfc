@@ -10,7 +10,7 @@ while True:
         break
     except:
         print("Connection Failed")
-        time.sleep(60)
+        time.sleep(30)
 
 
 numberOfTiles = (-1,-1)

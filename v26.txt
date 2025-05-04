@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v26 cleanup
 v25 STABLE
 v24 measurement fixes and set rules
 v23 STABLE time measure and timeextract

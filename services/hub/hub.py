@@ -16,12 +16,6 @@ sqlUpdateChunk = "UPDATE mapchunks SET content = %s, computed = 1 WHERE chunkID 
 sqlMapByID = "SELECT locationX,locationY,content FROM mapchunks WHERE mapID = %s;"
 
 
-# RABBITMQ CONNECTION
-#connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
-#channel = connection.channel()
-#channel.queue_declare(queue='maptickets', durable=True)
-
-
 
 
 
@@ -29,11 +23,12 @@ sqlMapByID = "SELECT locationX,locationY,content FROM mapchunks WHERE mapID = %s
 
 app = Flask(__name__)
 
+
+# HUB SERVICE PATHS
+
 @app.route("/")
 def showHome():
     return "HUB SERVICE FOR SAVING MAPCHUNKS"
-
-
 
 
 @app.route("/saveChunk", methods=["POST"])
@@ -44,7 +39,6 @@ def saveChunk():
     valuesToInsert = (data["mapID"], data["chunkID"], data["locX"], data["locY"], data["entropyTolerance"], data["content"], False)
     dbCursor.execute(sqlInsert, valuesToInsert)
     database.commit()
-    print(dbCursor.rowcount)
     print("saved chunk in db")
     database.disconnect()
     return "done"
@@ -57,6 +51,7 @@ def updateChunk():
     valuesToInsert = (json.dumps(data["content"]), data["chunkID"])
     dbCursor.execute(sqlUpdateChunk, valuesToInsert)
     database.commit()
+    print("updated chunk in db")
     database.disconnect()
     return "done"
 
@@ -91,7 +86,6 @@ def getMapChunkByChunkID(ID):
     dbCursor = database.cursor()
     dbCursor.execute(sqlGetByTicketID, (str(ID),))
     result = dbCursor.fetchone()
-    print("RESULT: ", result)
     database.disconnect()
     return json.dumps(result)
 
@@ -101,7 +95,6 @@ def getMapByID(ID):
     dbCursor = database.cursor()
     dbCursor.execute(sqlMapByID, (str(ID),))
     result = dbCursor.fetchall()
-    print("len(result): ", len(result))
     content = []
     for chunk in result:
         content.append(json.loads(chunk[2]))
@@ -123,12 +116,10 @@ def getMapByID(ID):
         for x in range (0,(maxLocX+1)*sizeX):
             temp.append(0)
         fullMap.append(temp)
-    print("fullmap: ", fullMap)
     for i,chunk in enumerate(result):
         for y in range (0,sizeY):
             for x in range (0, sizeX):
                 fullMap[chunk[1]*sizeY+y][chunk[0]*sizeX+x] = content[i][y][x]
-    print("FULLMAP: ", fullMap)
     return fullMap
 
 

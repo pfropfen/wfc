@@ -81,18 +81,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfcdb
   labels:
     app: wfcdb
 spec:
-  #type: NodePort
   ports:
   - port: 3306
-    #name: wfcmanager
-    #targetPort: 5000
-    #nodePort: 32756
   selector:
     app: wfcdb
 ---
@@ -131,18 +125,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfcrabbit
   labels:
     app: wfcrabbit
 spec:
-  #type: NodePort
   ports:
   - port: 5672
-    #name: wfcmanager
-    #targetPort: 5000
-    #nodePort: 32756
   selector:
     app: wfcrabbit
 ---
@@ -170,8 +158,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfcmanager
   labels:
     app: wfcmanager
@@ -205,14 +191,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
-#      imagePullSecrets:
-#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfcdistributor
   labels:
     app: wfcdistributor
@@ -224,8 +206,6 @@ spec:
     protocol: TCP
     targetPort: 5001
     nodePort: 31001
-  #externalIPs:
-    #- 192.168.1.93
   selector:
     app: wfcdistributor
 ---
@@ -249,14 +229,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
-#      imagePullSecrets:
-#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfchub
   labels:
     app: wfchub
@@ -290,24 +266,16 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5002
-#      imagePullSecrets:
-#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfcworker
   labels:
     app: wfcworker
 spec:
-  #type: NodePort
   ports:
   - port: 5003
-    #name: wfcmanager
-    #targetPort: 5000
-    #nodePort: 32756
   selector:
     app: wfcworker
 ---
@@ -331,14 +299,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5003
-#      imagePullSecrets:
-#        - name: dockerauth
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  #annotations:
-    #service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: wfctimekeeper
   labels:
     app: wfctimekeeper
