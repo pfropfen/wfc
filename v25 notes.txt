@@ -1,8 +1,9 @@
 
-NOTES v24:
-zeitmessungen, set rules
+NOTES v25:
+stable
 
 
+TODOs siehe unten
 ------------------------------
 v19
 sudo tail -n 2 token.sh > jointoken.sh
