@@ -1,5 +1,10 @@
 
-NOTES v26:
+v27:
+archtitektir-bild erstellt
+
+
+
+v26:
 aufräumen, große prints raus, unnötige dateien raus
 
 

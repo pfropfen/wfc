@@ -1,6 +1,6 @@
 VERSION HISTORY
 ---------------
-
+v27 added architecture picture to repo
 v26 cleanup
 v25 STABLE
 v24 measurement fixes and set rules
