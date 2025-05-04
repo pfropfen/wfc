@@ -1,4 +1,9 @@
 
+
+v29:
+geplante messreihen siehe messreihen.xlsx
+
+
 v27:
 archtitektir-bild erstellt
 
