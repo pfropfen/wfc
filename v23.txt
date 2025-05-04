@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
 
+v23 STABLE time measure and timeextract
 v22 volume managing
 v21 updateMapTime for TimeKeeper, volume managing
 v20 STABLE (last bugfixes)

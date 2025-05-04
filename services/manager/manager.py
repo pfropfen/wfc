@@ -1,8 +1,8 @@
 import pandas as pd
-import flask
+from flask import Flask, request, render_template, redirect, jsonify
 #import logging
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -11,48 +11,62 @@ app = flask.Flask(__name__)
 # MANAGER
 
 
-
 # READ RULES
 data = pd.read_excel("rules.xlsx", usecols="B")
 
-numberOfTiles = (int(data.values[0][0]),int(data.values[1][0]))
-numberOfParts = int(data.values[2][0])
-entropyTolerance = int(data.values[3][0])
-numberOfWorkers = int(data.values[4][0])
+
+app.config["numberOfTiles"] = int(data.values[0][0])
+app.config["numberOfParts"] = int(data.values[2][0])
+app.config["entropyTolerance"] = int(data.values[3][0])
+app.config["numberOfWorkers"] = int(data.values[4][0])
 
 #logging.logger.debug("numberOfTiles: "+str(numberOfTiles))
 #logging.logger.debug("numberOfParts: "+str(numberOfParts))
 #logging.logger.debug("entropyTolerance: "+str(entropyTolerance))
 #logging.logger.debug("numberOfWorkers: "+str(numberOfWorkers))
-print("numberOfTiles: ", numberOfTiles)
-print("numberOfParts: ", numberOfParts)
-print("entropyTolerance: ", entropyTolerance)
-print("numberOfWorkers: ", numberOfWorkers)
+print("numberOfTiles: ", app.config["numberOfTiles"])
+print("numberOfParts: ", app.config["numberOfParts"])
+print("entropyTolerance: ", app.config["entropyTolerance"])
+print("numberOfWorkers: ", app.config["numberOfWorkers"])
+
 
 
 @app.route("/")
 def showRules():
-    return flask.jsonify({"numberOfTiles: ": numberOfTiles, "numberOfParts: ": numberOfParts, "entropyTolerance: ": entropyTolerance, "numberOfWorkers: ": numberOfWorkers})
-    
+    return Flask.jsonify({"numberOfTiles: ": (app.config["numberOfTiles"],app.config["numberOfTiles"]), "numberOfParts: ": app.config["numberOfParts"], "entropyTolerance: ": app.config["entropyTolerance"], "numberOfWorkers: ": app.config["numberOfWorkers"]})
+
+@app.route('/setRules', methods=['GET', 'POST'])
+def showHome():
+    if request.method == 'POST':
+        # aktualisierten Werte verarbeiten
+        app.config["numberOfTiles"] = int(request.form.get('var1'))
+        app.config["numberOfParts"] = int(request.form.get('var2'))
+        app.config["entropyTolerance"] = int(request.form.get('var3'))
+        app.config["numberOfWorkers"] = int(request.form.get('var4'))
+        # Werte speichern oder weiterverarbeiten
+        return render_template('manager.html', var1=app.config["numberOfTiles"], var2=app.config["numberOfParts"], var3=app.config["entropyTolerance"], var4=app.config["numberOfWorkers"])
+    return render_template('manager.html', var1=app.config["numberOfTiles"], var2=app.config["numberOfParts"], var3=app.config["entropyTolerance"], var4=app.config["numberOfWorkers"])
+
+
 @app.route("/numberOfTiles")
 def getNumberOfTiles():
-    return flask.jsonify(numberOfTiles)
+    return jsonify((app.config["numberOfTiles"],app.config["numberOfTiles"]))
     
 @app.route("/numberOfParts")
 def getNumberOfParts():
-    return flask.jsonify(numberOfParts)
+    return jsonify(app.config["numberOfParts"])
 
 @app.route("/entropyTolerance")
 def getEntropyTolerance():
-    return flask.jsonify(entropyTolerance)
+    return jsonify(app.config["entropyTolerance"])
     
 @app.route("/numberOfWorkers")
 def getNumberOfWorkers():
-    return flask.jsonify(numberOfWorkers)
+    return jsonify(app.config["numberOfWorkers"])
     
 @app.route("/restrictions")
 def getRestrictions():
-    return flask.jsonify((tileCompatibilityList,tileCompatibilityLookUpTable,binaryLookUpTable))
+    return jsonify((tileCompatibilityList,tileCompatibilityLookUpTable,binaryLookUpTable))
 
 
 
