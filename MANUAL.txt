@@ -1,0 +1,68 @@
+USER MANUAL
+-----------
+
+
+
+MASTER NODE:
+git clone https://github.com/pfropfen/wfc_old.git
+sudo bash k8master.sh
+sudo tail -n 2 token.sh > jointoken.sh
+
+python3.py -m http.server
+
+
+-------------
+WORKER NODE:
+git clone https://github.com/pfropfen/wfc_old.git
+sudo bash k8node.sh
+
+curl [MASTER-IP]:8000/jointoken.sh > jointoken.sh
+sudo bash jointoken.sh
+
+
+-------------
+kubectl apply -f wfcdeploy.yaml
+kubectl delete -f wfcdeploy.yaml
+NUR NACH ÄNDERUNG: sudo bash rebirth.sh
+
+
+kubectl get services
+kubectl get pods -o wide
+
+
+-------------
+
+DISTRIBUTOR:
+http://192.168.178.56:31001/mapGenerator
+
+HUB:
+31002
+
+MANAGER:
+http://192.168.178.56:31000/setRules
+
+
+
+
+
+PORTS:
+------
+timekeeper: 6002 (nodePort: 32002)
+db: 3306
+timedb: 3306  nodeport: 31006
+manager: 5000   nodePort: 31000
+distributor: 5001 (nodeport: 31001)
+hub: 5002 (nodeport: 31002)
+mysql: 3306
+
+
+
+--------------
+unter windows:
+maploader.py -> id einfügen
+timex.py -> zeiten auslesen
+
+
+
+
+
