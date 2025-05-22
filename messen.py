@@ -45,12 +45,12 @@ with open(CSV_PATH, mode='r', newline='') as file:
     for row_index, row in enumerate(reader, start=1):
     
         print("Row: ", row)
-        if (row[2] == numberOfWorkers):
+        if (int(row[2]) == numberOfWorkers):
             # Build payload from row (customize)
             payload = {
-                'numberOfTiles': row[0],
-                'numberOfParts': row[1],
-                'numberOfWorkers': row[2],
+                'numberOfTiles': int(row[0]),
+                'numberOfParts': int(row[1]),
+                'numberOfWorkers': int(row[2]),
                 'entropyTolerance': 5
             }
             
