@@ -4,7 +4,7 @@ import mysql.connector
 import csv
 import time
 import threading
-from pynput import keyboard
+import os
 
 # --- DB configurations ---
 DB1_CONFIG = {
@@ -36,24 +36,21 @@ MAX_WAIT_TIME = 1200      # max seconds to wait per row
 exit_requested = False
 immediate_exit_requested = False
 
-def on_press(key):
-    global exit_requested, immediate_exit_requested
-    try:
-        if key.char == 'x':
-            print("\nGraceful exit requested (after current row).")
-            exit_requested = True
-        elif key.char == 'q':
-            print("\nImmediate exit requested.")
-            immediate_exit_requested = True
-    except AttributeError:
-        pass
+def wait_for_exit_input():
+    global exit_requested
+    input("Press ENTER at any time to stop the script gracefully after current row...\n")
+    print("\nGraceful exit requested.")
+    exit_requested = True
 
-def watch_keys():
-    with keyboard.Listener(on_press=on_press) as listener:
-        listener.join()
+def wait_for_immediate_exit_input():
+    global immediate_exit_requested
+    input("Press ENTER again to stop immediately...\n")
+    print("\nImmediate exit requested.")
+    immediate_exit_requested = True
 
-# Start key listener in background
-threading.Thread(target=watch_keys, daemon=True).start()
+# Start input listeners in background
+threading.Thread(target=wait_for_exit_input, daemon=True).start()
+threading.Thread(target=wait_for_immediate_exit_input, daemon=True).start()
 
 # --- Step 1: Read and process CSV ---
 updated_rows = []
