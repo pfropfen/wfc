@@ -48,10 +48,10 @@ with open(CSV_PATH, mode='r', newline='') as file:
         if (int(row[2]) == numberOfWorkers):
             # Build payload from row (customize)
             payload = {
-                'numberOfTiles': int(row[0]),
-                'numberOfParts': int(row[1]),
-                'entropyTolerance': 5,
-                'numberOfWorkers': int(row[2])
+                'numberOfTiles': row[0],
+                'numberOfParts': row[1],
+                'entropyTolerance': "5",
+                'numberOfWorkers': row[2]
             }
             
             response = requests.post("http://192.168.178.56:31000/setRules", data=payload)
