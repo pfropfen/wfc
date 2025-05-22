@@ -40,9 +40,11 @@ with open(CSV_PATH, mode='r', newline='') as file:
         headers.append(UUID_COLUMN_NAME)
     if DB_VALUE_COLUMN_NAME not in headers:
         headers.append(DB_VALUE_COLUMN_NAME)
+        
 
     for row_index, row in enumerate(reader, start=1):
     
+        print("Row: ", row)
         if (row[2] == numberOfWorkers):
             # Build payload from row (customize)
             payload = {
