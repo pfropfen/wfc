@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import mysql.connector
 import csv
 import time
+import threading
+import keyboard
 
 # --- DB configurations ---
 DB1_CONFIG = {
