@@ -21,7 +21,7 @@ DB2_CONFIG = {
     'database': 'maps'
 }
 
-numberOfWorkers = 1
+numberOfWorkers = 2
 
 # --- Constants ---
 CSV_PATH = 'messreihen.csv'
