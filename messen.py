@@ -45,7 +45,7 @@ def watch_for_exit():
 
 def watch_for_immediate_exit():
     global immediate_exit_requested
-    print("Press 'Q' to stop the script gracefully immidiately.")
+    print("Press 'Q' to stop the script gracefully immediately.")
     keyboard.wait('q')
     print("\nExit requested. saving...")
     immediate_exit_requested = True
