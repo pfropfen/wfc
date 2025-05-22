@@ -69,6 +69,7 @@ with open(CSV_PATH, mode='r', newline='') as file:
 
     for row_index, row in enumerate(reader, start=1):
         if exit_requested:
+            updated_rows.append(row)
             break
     
     
@@ -141,6 +142,7 @@ with open(CSV_PATH, mode='r', newline='') as file:
                     db_value = ''
             
             if immediate_exit_requested:
+                updated_rows.append(row)
                 break
             
             # --- Step 5: Append UUID and DB value to CSV row ---
