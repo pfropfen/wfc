@@ -152,8 +152,8 @@ with open(CSV_PATH, mode='r', newline='') as file:
         updated_rows.append(row)
         
     # If we exited early, fill in unprocessed rows as-is
-        for remaining_row in reader:
-            updated_rows.append(remaining_row)
+    for remaining_row in reader:
+        updated_rows.append(remaining_row)
 
 # --- Step 6: Write updated CSV ---
 with open(CSV_PATH, mode='w', newline='') as file:
