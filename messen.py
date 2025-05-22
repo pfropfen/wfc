@@ -50,11 +50,12 @@ with open(CSV_PATH, mode='r', newline='') as file:
             payload = {
                 'numberOfTiles': int(row[0]),
                 'numberOfParts': int(row[1]),
-                'numberOfWorkers': int(row[2]),
-                'entropyTolerance': 5
+                'entropyTolerance': 5,
+                'numberOfWorkers': int(row[2])
             }
             
             response = requests.post("http://192.168.178.56:31000/setRules", data=payload)
+            print("Response: ", response)
 
             # --- Step 2: Send POST request ---
             try:
