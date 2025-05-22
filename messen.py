@@ -71,26 +71,16 @@ with open(CSV_PATH, mode='r', newline='') as file:
 
             db_value = ''
             if uuid:
-                # --- Step 3: Query main DB for data ---
-                try:
-                    conn1 = mysql.connector.connect(**DB1_CONFIG)
-                    cursor1 = conn1.cursor()
-                    cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s", (uuid,))
-                    result = cursor1.fetchone()
-                    db_value = result[0] if result else ''
-                    cursor1.close()
-                    conn1.close()
-                except mysql.connector.Error as err:
-                    print(f"MySQL error (main DB) for UUID {uuid}: {err}")
-                    db_value = ''
+               
+              
 
-                # --- Step 4: Poll status DB until computation is done ---
+                # --- Step 3: Poll status DB until computation is done ---
                 start_time = time.time()
                 while True:
                     try:
                         conn2 = mysql.connector.connect(**DB2_CONFIG)
                         cursor2 = conn2.cursor()
-                        cursor2.execute("SELECT computed FROM mapchunks WHERE mapID = %s", (uuid,))
+                        cursor2.execute("SELECT computed FROM mapchunks WHERE mapID = %s LIMIT 1", (uuid,))
                         status_result = cursor2.fetchone()
                         cursor2.close()
                         conn2.close()
@@ -106,6 +96,19 @@ with open(CSV_PATH, mode='r', newline='') as file:
                         break
 
                     time.sleep(STATUS_POLL_INTERVAL)
+                    
+                # --- Step 4: Query main DB for data ---
+                try:
+                    conn1 = mysql.connector.connect(**DB1_CONFIG)
+                    cursor1 = conn1.cursor()
+                    cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s LIMIT 1", (uuid,))
+                    result = cursor1.fetchone()
+                    db_value = result[0] if result else ''
+                    cursor1.close()
+                    conn1.close()
+                except mysql.connector.Error as err:
+                    print(f"MySQL error (main DB) for UUID {uuid}: {err}")
+                    db_value = ''
 
             # --- Step 5: Append UUID and DB value to CSV row ---
             while len(row) < len(headers):
@@ -113,7 +116,7 @@ with open(CSV_PATH, mode='r', newline='') as file:
             row[headers.index(UUID_COLUMN_NAME)] = uuid
             row[headers.index(DB_VALUE_COLUMN_NAME)] = db_value
 
-            updated_rows.append(row)
+        updated_rows.append(row)
 
 # --- Step 6: Write updated CSV ---
 with open(CSV_PATH, mode='w', newline='') as file:
