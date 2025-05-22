@@ -15,7 +15,7 @@ DB1_CONFIG = {
 
 DB2_CONFIG = {
     'host': '192.168.178.56',
-    'port': 31007
+    'port': 31007,
     'user': 'wfc',
     'password': 'wfc',
     'database': 'maps'
