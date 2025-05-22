@@ -43,9 +43,6 @@ def watch_for_exit():
     print("\nExit requested. Finishing current row and saving...")
     exit_requested = True
 
-# Start key listener in background
-threading.Thread(target=watch_for_exit, daemon=True).start()
-
 def watch_for_immediate_exit():
     global exit_requested
     print("Press 'Q' to stop the script gracefully immidiately.")
