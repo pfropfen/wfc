@@ -32,30 +32,25 @@ DB_VALUE_COLUMN_NAME = 'total'
 STATUS_POLL_INTERVAL = 5  # seconds between status checks
 MAX_WAIT_TIME = 1200        # max seconds to wait per row
 
-# --- Exit flag ---
+# --- Exit flags ---
 exit_requested = False
 immediate_exit_requested = False
 
-def watch_for_exit():
+def wait_for_exit_input():
     global exit_requested
-    print("Press 'X' to stop the script gracefully.")
-    keyboard.wait('x')
-    print("\nExit requested. Finishing current row and saving...")
+    input("Press ENTER at any time to stop the script gracefully after current row...\n")
+    print("\nGraceful exit requested.")
     exit_requested = True
 
-# Start key listener in background
-threading.Thread(target=watch_for_exit, daemon=True).start()
-
-def watch_for_immediate_exit():
-    global exit_requested
-    print("Press 'Q' to stop the script gracefully immidiately.")
-    keyboard.wait('q')
-    print("\nExit requested. saving...")
+def wait_for_immediate_exit_input():
+    global immediate_exit_requested
+    input("Press ENTER again to stop immediately...\n")
+    print("\nImmediate exit requested.")
     immediate_exit_requested = True
 
-# Start key listener in background
-threading.Thread(target=watch_for_exit, daemon=True).start()
-threading.Thread(target=watch_for_immediate_exit, daemon=True).start()
+# Start input listeners in background
+threading.Thread(target=wait_for_exit_input, daemon=True).start()
+threading.Thread(target=wait_for_immediate_exit_input, daemon=True).start()
 
 
 # --- Step 1: Read and process CSV ---
