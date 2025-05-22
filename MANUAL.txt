@@ -48,7 +48,7 @@ http://192.168.178.56:31000/setRules
 PORTS:
 ------
 timekeeper: 6002 (nodePort: 32002)
-db: 3306
+db: 3306  nodeport: 31007
 timedb: 3306  nodeport: 31006
 manager: 5000   nodePort: 31000
 distributor: 5001 (nodeport: 31001)

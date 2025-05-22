@@ -8,7 +8,7 @@ spec:
   type: NodePort
   ports:
   - port: 3306
-    name: dtimedbport
+    name: timedbport
     protocol: TCP
     targetPort: 3306
     nodePort: 31006
@@ -85,8 +85,13 @@ metadata:
   labels:
     app: wfcdb
 spec:
+  type: NodePort
   ports:
   - port: 3306
+    name: dbport
+    protocol: TCP
+    targetPort: 3306
+    nodePort: 31007
   selector:
     app: wfcdb
 ---
