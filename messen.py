@@ -69,8 +69,8 @@ with open(CSV_PATH, mode='r', newline='') as file:
         
 
     for row_index, row in enumerate(reader, start=1):
-    if exit_requested:
-        break
+        if exit_requested:
+            break
     
     
         print("Row: ", row)
@@ -107,8 +107,8 @@ with open(CSV_PATH, mode='r', newline='') as file:
                 # --- Step 3: Poll status DB until computation is done ---
                 start_time = time.time()
                 while True:
-                        if immediate_exit_requested:
-                            break
+                    if immediate_exit_requested:
+                        break
                     try:
                         conn2 = mysql.connector.connect(**DB2_CONFIG)
                         cursor2 = conn2.cursor()
