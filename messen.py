@@ -25,7 +25,7 @@ DB2_CONFIG = {
     'database': 'maps'
 }
 
-numberOfWorkers = sys.argv[1]
+numberOfWorkers = int(sys.argv[1])
 
 # --- Constants ---
 CSV_PATH = 'messreihen.csv'
