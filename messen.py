@@ -5,6 +5,8 @@ import csv
 import time
 import threading
 import keyboard
+import sys
+
 
 # --- DB configurations ---
 DB1_CONFIG = {
@@ -23,7 +25,7 @@ DB2_CONFIG = {
     'database': 'maps'
 }
 
-numberOfWorkers = 1
+numberOfWorkers = sys.argv[1]
 
 # --- Constants ---
 CSV_PATH = 'messreihen.csv'

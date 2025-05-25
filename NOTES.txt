@@ -110,8 +110,7 @@ WIE SIEHTS MIT SKALIERUNG AUS? datenbanken?
 
 dran denken dass wave/wavelookup auch in worker und maploader vorhanden sind
 
-
-
+--> für kubernetes kapitel: kubectl, kudeadm und kubecli
 
 
 

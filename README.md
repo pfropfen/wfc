@@ -57,8 +57,13 @@ http://[MASTER-NODE-IP]:31000/setRules         # Manager Service um Rules festzu
 http://[MASTER-NODE-IP]:31001/mapGenerator     # Distributor Service um einen Generierungsprozess anzustoßen, am Ende der Generierung wird die MapID auf der Seite ausgegeben
 
 
-Für die Maploader Applikation muss maploader.py sowie wavefunctionlookup.py einmalig angepast werden indem die IP der Master-Node der Variablen "managerurl" zugewiesen wird.
+Worker während des Betriebs skalieren:
 
+kubectl scale deployment/wfcworker-deployment --replicas=1
+
+
+Für die Maploader Applikation muss maploader.py sowie wavefunctionlookup.py einmalig angepast werden indem die IP der Master-Node der Variablen "managerurl" zugewiesen wird.
+Für die Timeextractor Applikation muss timex.py ebenfalls angepasst werden in dem bei export_database_to_csv(host="XXX.XXX.XX.XX",..) die IP der Manager-Node eingetragen wird.  
  
 Um eine generierte Map anzeigen zu lassen:
 maploader.py ausführen und MapID eingeben.

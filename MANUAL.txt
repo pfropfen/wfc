@@ -41,9 +41,21 @@ HUB:
 MANAGER:
 http://192.168.178.56:31000/setRules
 
+---------------------------------------
+
+DATENBANK EINSEHEN:
+kubectl exec -it wfchub-deployment-xxxxxx-xxxx /bin/bash
+mysql -u wfc -p 
+(passwort: wfc)
+
+---------------------------------------
+
+WORKER WÄHREND DES BETRIEBS SKALIEREN:
+
+kubectl scale deployment/wfcworker-deployment --replicas=1
 
 
-
+---------------------------------------
 
 PORTS:
 ------
