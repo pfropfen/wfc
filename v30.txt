@@ -1,5 +1,6 @@
 VERSION HISTORY
 ---------------
+v30 measures phase1 done, prepared for phase2, changed messen.py
 v29 added messreihen.xlxs
 v28 added notes and manual
 v27 added architecture picture to repo
