@@ -124,9 +124,9 @@ with open(CSV_PATH, mode='r', newline='') as file:
                     except mysql.connector.Error as err:
                         print(f"MySQL error (status DB) for UUID {uuid}: {err}")
 
-                    if time.time() - start_time > MAX_WAIT_TIME:
-                        print(f"Timeout waiting for completion for UUID {uuid}. Moving to next.")
-                        break
+                    #if time.time() - start_time > MAX_WAIT_TIME:
+                        #print(f"Timeout waiting for completion for UUID {uuid}. Moving to next.")
+                        #break
 
                     time.sleep(STATUS_POLL_INTERVAL)
                     
