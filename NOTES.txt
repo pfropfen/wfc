@@ -114,6 +114,11 @@ dran denken dass wave/wavelookup auch in worker und maploader vorhanden sind
 
 --> AUSBLICK: verschachtelter distributor (parallelisierung)   (vllt auch ins kolloquium)
 
+--> formel für sweetspot: anzahl parts abhängig von mapsize
+    andere formeln?
+
+--> distributor-zeit vs worker-zeit
+
 
 
 
