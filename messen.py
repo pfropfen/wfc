@@ -129,14 +129,14 @@ with open(CSV_PATH, mode='r', newline='') as file:
                         #break
 
                     time.sleep(STATUS_POLL_INTERVAL)
-                    
+                
+                time.sleep(STATUS_POLL_INTERVAL*2)                
                 # --- Step 4: Query main DB for data ---
                 try:
                     conn1 = mysql.connector.connect(**DB1_CONFIG)
                     cursor1 = conn1.cursor()
                     cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s LIMIT 1", (uuid,))
                     result = cursor1.fetchone()
-                    db_value = result[0] if result else ''
                     cursor1.close()
                     conn1.close()
                 except mysql.connector.Error as err:
