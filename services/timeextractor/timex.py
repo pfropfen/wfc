@@ -48,4 +48,4 @@ def export_database_to_csv(host, user, password, database, port=3306, output_dir
     print("Database export completed.")
 
 # Connection to DB
-export_database_to_csv(host="192.168.178.56", user="root", password="root", database="times", port=31006)
+export_database_to_csv(host="139.6.65.27", user="root", password="root", database="times", port=31006)

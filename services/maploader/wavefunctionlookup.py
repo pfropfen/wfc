@@ -6,7 +6,7 @@ import json
 # WAVE FUNCTION TILE LOOKUP TABLE
 
 # URLs
-managerurl = "http://192.168.178.56:31000"
+managerurl = "http://139.6.65.27:31000"
 
 
 tileCompatibilityList = []
