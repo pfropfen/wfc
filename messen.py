@@ -10,7 +10,7 @@ import sys
 
 # --- DB configurations ---
 DB1_CONFIG = {
-    'host': '192.168.178.56',
+    'host': '139.6.65.27',
     'port': 31006,
     'user': 'wfc',
     'password': 'wfc',
@@ -18,7 +18,7 @@ DB1_CONFIG = {
 }
 
 DB2_CONFIG = {
-    'host': '192.168.178.56',
+    'host': '139.6.65.27',
     'port': 31007,
     'user': 'wfc',
     'password': 'wfc',
@@ -85,11 +85,11 @@ with open(CSV_PATH, mode='r', newline='') as file:
                 'var4': str(row[2])
             }
             
-            response = requests.post("http://192.168.178.56:31000/setRules", data=payload)
+            response = requests.post("http://139.6.65.27:31000/setRules", data=payload)
 
             # --- Step 2: Send POST request ---
             try:
-                response = requests.post("http://192.168.178.56:31001/mapGenerator")
+                response = requests.post("http://139.6.65.27:31001/mapGenerator")
                 if response.ok:
                     soup = BeautifulSoup(response.text, 'html.parser')
                     uuid_tag = soup.h1
@@ -137,6 +137,7 @@ with open(CSV_PATH, mode='r', newline='') as file:
                     cursor1 = conn1.cursor()
                     cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s LIMIT 1", (uuid,))
                     result = cursor1.fetchone()
+                    db_value = result[0] if result else ''
                     cursor1.close()
                     conn1.close()
                 except mysql.connector.Error as err:
