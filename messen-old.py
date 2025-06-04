@@ -76,7 +76,7 @@ with open(CSV_PATH, mode='r', newline='') as file:
     
     
         print("Row: ", row)
-        if int(row[2]) == numberOfWorkers and (len(row) < 7 or row[6].strip() == ''):
+        if (int(row[2]) == numberOfWorkers):
             # Build payload from row (customize)
             payload = {
                 'var1': str(row[0]),
