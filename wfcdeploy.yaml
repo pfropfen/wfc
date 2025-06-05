@@ -158,7 +158,7 @@ spec:
     spec:
       containers:
       - name: wfcrabbit-container
-        image: rabbitmq:latest
+        image: rabbitmq:4.1.1-management
         imagePullPolicy: Always
         ports:
         - containerPort: 5672
