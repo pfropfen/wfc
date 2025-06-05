@@ -7,5 +7,5 @@ def callback(ch, method, properties, body):
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='139.6.65.27', port=31672))
 channel = connection.channel()
 
-channel.basic_consume(queue='your_queue_name', on_message_callback=callback, auto_ack=False)
+channel.basic_consume(queue='maptickets', on_message_callback=callback, auto_ack=False)
 channel.start_consuming()
