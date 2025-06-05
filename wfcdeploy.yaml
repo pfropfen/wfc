@@ -134,8 +134,11 @@ metadata:
   labels:
     app: wfcrabbit
 spec:
+  type: NodePort
   ports:
   - port: 5672
+    targetPort: 5672
+    nodePort: 31672
   selector:
     app: wfcrabbit
 ---
