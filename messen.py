@@ -7,10 +7,12 @@ import threading
 import keyboard
 import sys
 
+# --- Configuration ---
+BASE_IP = '192.168.178.56'  # <<<<<< HIER IP EINMAL ÄNDERN
 
 # --- DB configurations ---
 DB1_CONFIG = {
-    'host': '139.6.65.27',
+    'host': BASE_IP,
     'port': 31006,
     'user': 'wfc',
     'password': 'wfc',
@@ -18,7 +20,7 @@ DB1_CONFIG = {
 }
 
 DB2_CONFIG = {
-    'host': '139.6.65.27',
+    'host': BASE_IP,
     'port': 31007,
     'user': 'wfc',
     'password': 'wfc',
@@ -32,7 +34,7 @@ CSV_PATH = 'messreihen.csv'
 UUID_COLUMN_NAME = 'uuid'
 DB_VALUE_COLUMN_NAME = 'total'
 STATUS_POLL_INTERVAL = 5  # seconds between status checks
-MAX_WAIT_TIME = 1200        # max seconds to wait per row
+MAX_WAIT_TIME = 1200      # max seconds to wait per row
 
 # --- Exit flag ---
 exit_requested = False
@@ -56,7 +58,6 @@ def watch_for_immediate_exit():
 threading.Thread(target=watch_for_exit, daemon=True).start()
 threading.Thread(target=watch_for_immediate_exit, daemon=True).start()
 
-
 # --- Step 1: Read and process CSV ---
 updated_rows = []
 with open(CSV_PATH, mode='r', newline='') as file:
@@ -68,16 +69,13 @@ with open(CSV_PATH, mode='r', newline='') as file:
     if DB_VALUE_COLUMN_NAME not in headers:
         headers.append(DB_VALUE_COLUMN_NAME)
         
-
     for row_index, row in enumerate(reader, start=1):
         if exit_requested:
             updated_rows.append(row)
             break
-    
-    
+
         print("Row: ", row)
         if int(row[2]) == numberOfWorkers and (len(row) < 7 or row[6].strip() == ''):
-            # Build payload from row (customize)
             payload = {
                 'var1': str(row[0]),
                 'var2': str(row[1]),
@@ -85,11 +83,12 @@ with open(CSV_PATH, mode='r', newline='') as file:
                 'var4': str(row[2])
             }
             
-            response = requests.post("http://139.6.65.27:31000/setRules", data=payload)
+            response = requests.post(f"http://{BASE_IP}:31000/setRules", data=payload)
+            time.sleep(30)
 
             # --- Step 2: Send POST request ---
             try:
-                response = requests.post("http://139.6.65.27:31001/mapGenerator")
+                response = requests.post(f"http://{BASE_IP}:31001/mapGenerator")
                 if response.ok:
                     soup = BeautifulSoup(response.text, 'html.parser')
                     uuid_tag = soup.h1
@@ -102,10 +101,6 @@ with open(CSV_PATH, mode='r', newline='') as file:
 
             db_value = ''
             if uuid:
-               
-              
-
-                # --- Step 3: Poll status DB until computation is done ---
                 start_time = time.time()
                 while True:
                     if immediate_exit_requested:
@@ -124,14 +119,9 @@ with open(CSV_PATH, mode='r', newline='') as file:
                     except mysql.connector.Error as err:
                         print(f"MySQL error (status DB) for UUID {uuid}: {err}")
 
-                    #if time.time() - start_time > MAX_WAIT_TIME:
-                        #print(f"Timeout waiting for completion for UUID {uuid}. Moving to next.")
-                        #break
-
                     time.sleep(STATUS_POLL_INTERVAL)
                 
                 time.sleep(STATUS_POLL_INTERVAL*2)                
-                # --- Step 4: Query main DB for data ---
                 try:
                     conn1 = mysql.connector.connect(**DB1_CONFIG)
                     cursor1 = conn1.cursor()
@@ -148,7 +138,6 @@ with open(CSV_PATH, mode='r', newline='') as file:
                 updated_rows.append(row)
                 break
             
-            # --- Step 5: Append UUID and DB value to CSV row ---
             while len(row) < len(headers):
                 row.append('')
             row[headers.index(UUID_COLUMN_NAME)] = uuid
@@ -156,7 +145,6 @@ with open(CSV_PATH, mode='r', newline='') as file:
 
         updated_rows.append(row)
         
-    # If we exited early, fill in unprocessed rows as-is
     for remaining_row in reader:
         updated_rows.append(remaining_row)
 
