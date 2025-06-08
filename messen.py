@@ -8,7 +8,7 @@ import keyboard
 import sys
 
 # --- Configuration ---
-BASE_IP = '192.168.178.56'  # <<<<<< HIER IP EINMAL ÄNDERN
+BASE_IP = '139.6.65.27'  # <<<<<< HIER IP EINMAL ÄNDERN
 
 # --- DB configurations ---
 DB1_CONFIG = {
