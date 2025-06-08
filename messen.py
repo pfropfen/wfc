@@ -27,6 +27,27 @@ DB2_CONFIG = {
     'database': 'maps'
 }
 
+# --- RabbitMQ configurations ---
+RABBITMQ_USER = 'guest'
+RABBITMQ_PASS = 'guest'
+RABBITMQ_QUEUE = 'maptickets'  # <<< ggf. anpassen
+RABBITMQ_API_URL = f'http://{BASE_IP}:31672/api/queues/%2F/{RABBITMQ_QUEUE}'
+
+def is_queue_empty():
+    try:
+        response = requests.get(RABBITMQ_API_URL, auth=(RABBITMQ_USER, RABBITMQ_PASS))
+        if response.ok:
+            data = response.json()
+            messages = data.get('messages', -1)
+            print(f"Queue '{RABBITMQ_QUEUE}' has {messages} messages.")
+            return messages == 0
+        else:
+            print(f"Failed to get queue status: {response.status_code} {response.text}")
+            return False
+    except Exception as e:
+        print(f"Error checking RabbitMQ queue: {e}")
+        return False
+
 numberOfWorkers = int(sys.argv[1])
 
 # --- Constants ---
@@ -116,6 +137,15 @@ with open(CSV_PATH, mode='r', newline='') as file:
 
                         if status_result:
                             print(f"Computation complete for UUID {uuid}")
+
+                            # --- Warte auf leere RabbitMQ Queue ---
+                            print("Waiting for RabbitMQ queue to empty...")
+                            while not is_queue_empty():
+                                if immediate_exit_requested:
+                                    break
+                                time.sleep(5)
+                            print("RabbitMQ queue is empty. Continuing...")
+
                             break
                     except mysql.connector.Error as err:
                         print(f"MySQL error (status DB) for UUID {uuid}: {err}")
