@@ -4,9 +4,9 @@
 WORKER_COUNTS=(4 8)
 
 # Deployment-Name und Namespace
-DEPLOYMENT_NAME="worker-service"
+DEPLOYMENT_NAME="deployments/wfcworker-deployment"
 NAMESPACE="default"
-POD_LABEL_SELECTOR="app=worker-service"  # Label anpassen falls nötig
+POD_LABEL_SELECTOR="app=wfcworker"  # Label anpassen falls nötig
 
 # Passwort einmalig abfragen
 read -s -p "Bitte gib dein sudo-Passwort ein: " SUDO_PASSWORD
