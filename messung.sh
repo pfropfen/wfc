@@ -4,7 +4,7 @@
 WORKER_COUNTS=(4 8)
 
 # Deployment-Name und Namespace
-DEPLOYMENT_NAME="deployments/wfcworker-deployment"
+DEPLOYMENT_NAME="wfcworker-deployment"
 NAMESPACE="default"
 POD_LABEL_SELECTOR="app=wfcworker"  # Label anpassen falls nötig
 
