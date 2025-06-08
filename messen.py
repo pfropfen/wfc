@@ -108,13 +108,13 @@ with open(CSV_PATH, mode='r', newline='') as file:
                     try:
                         conn2 = mysql.connector.connect(**DB2_CONFIG)
                         cursor2 = conn2.cursor()
-                        cursor2.execute("SELECT computed FROM mapchunks WHERE mapID = %s GROUP BY mapID HAVING SUM(CASE WHEN computed IS NOT TRUE THEN 1 ELSE 0 END) = 0", (uuid,))
+                        cursor2.execute("SELECT mapID FROM mapchunks WHERE mapID = %s GROUP BY mapID HAVING SUM(CASE WHEN computed IS NOT TRUE THEN 1 ELSE 0 END) = 0", (uuid,))
                         
                         status_result = cursor2.fetchone()
                         cursor2.close()
                         conn2.close()
 
-                        if status_result and status_result[0] == 1:
+                        if status_result:
                             print(f"Computation complete for UUID {uuid}")
                             break
                     except mysql.connector.Error as err:
