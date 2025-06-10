@@ -14,7 +14,7 @@ timekeeperurl = "http://wfctimekeeper:6002"
 rabbithost = "wfcrabbit"
 
 # RABBITMQ CONNECTION
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost, heartbeat=3600))
 channel = connection.channel()
 channel.queue_declare(queue='maptickets', durable=True)
 
@@ -58,7 +58,10 @@ def callback(ch, method, properties, body):
     chunkDuration = int((endTime - startTime).total_seconds()*1000)
     # send chunk times to timekeeper
     sendChunkTimes(mapID, chunkID, startTime, endTime, chunkDuration)
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+    try:
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+    except:
+        print("Couldn't ack the request")
     
     
 print("WORKER SERVICE")
