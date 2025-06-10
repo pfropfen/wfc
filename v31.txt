@@ -1,6 +1,7 @@
 VERSION HISTORY
 ---------------
-V31 masures phase3 run1+2 done, prepared for run3
+V32 prepared for phase4 with new script
+V31 measures phase3 run1+2 done, prepared for run3
 v30 measures phase1 done, prepared for phase2, changed messen.py
 v29 added messreihen.xlxs
 v28 added notes and manual
