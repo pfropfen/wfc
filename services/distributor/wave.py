@@ -2,6 +2,7 @@ import random
 import wavefunctionlookup as wfl
 import time
 
+
 # GET RESTRICTIONS
 while True:
     try:
@@ -9,7 +10,8 @@ while True:
         break
     except:
         print("Connection Failed")
-        time.sleep(60)
+        time.sleep(30)
+
 
 numberOfTiles = (-1,-1)
 entropyTolerance = -1
@@ -41,11 +43,11 @@ def findLowestEntropyTile():
                     for i in range (0,len(listOfLowest)-1):
                         if (i != len(listOfLowest)-1):
                             listOfLowest[len(listOfLowest)-1-i] = listOfLowest[len(listOfLowest)-i-2]
-                        else:
-                            listOfLowest[0].clear() 
+                        #else:
+                    listOfLowest[0].clear() 
 
                     listOfLowest[0].append((x,y,col))
-                elif (numberOfOnes(col) <= lowest+entropyTolerance and numberOfOnes(col) >= lowest):
+                elif ((numberOfOnes(col) <= lowest+entropyTolerance) and (numberOfOnes(col) >= lowest)):
 
                     listOfLowest[numberOfOnes(col)-lowest].append((x,y,col))
                     

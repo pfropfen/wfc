@@ -100,7 +100,7 @@ with open(CSV_PATH, mode='r', newline='') as file:
             payload = {
                 'var1': str(row[0]),
                 'var2': str(row[1]),
-                'var3': "5",
+                'var3': "0",
                 'var4': str(row[2])
             }
             
