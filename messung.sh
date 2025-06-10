@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Werte für X definieren – diese kannst du anpassen
-WORKER_COUNTS=(4 8)
+WORKER_COUNTS=(1 2 4 8 9 16 18 25 32 36 49 50 64 72 98 100 128 144 196 256)
 
 # Deployment-Name und Namespace
 DEPLOYMENT_NAME="wfcworker-deployment"
