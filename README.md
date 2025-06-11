@@ -72,6 +72,7 @@ kubectl get pods -o wide
 # Worker während des Betriebs skalieren 					   
 kubectl scale deployment/wfcworker-deployment --replicas=X
 ```
+Hinweis: Der Standartwert für die maximale Anzahl an Verbindungen der MySQL-Datenbanken ist 150. Damit mehr als 150 Worker-Replicas skaliert werden können, muss in den Datenbanken die globale Variable max_connections manuell erhöht werden. Dieser Wert sollt allerdings mit Vorsicht behandelt werden, da bei nicht ausreichenden Hardware-Ressourcen Abstürze hervorgerufen werden können.
 
 ### Außerhalb des Clusters:
 Über einen Webbrowser können nun folgende Adressen erreicht werden (ersetze [MANAGER-NODE-IP] durch die vorliegende IP der Manager-Node):
