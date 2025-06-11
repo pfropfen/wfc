@@ -23,10 +23,15 @@
 
 ## Installation und Betrieb
 
-Auf der Manager-Node:
-git clone https://github.com/pfropfen/wfc.git  # das Repository klonen
-sudo bash k8master.sh                          # Kubernetes wird vollständig installiert und konfiguriert
+### Auf der Manager-Node:
 
+```bash
+# Repository klonen
+git clone https://github.com/pfropfen/wfc.git  
+
+# Kubernetes installieren und konfigurieren
+sudo bash k8master.sh                          
+```
 Anschließend muss die Datei "jointoken.sh" über einen beliebigen Weg auf alle zu verwendenden Nodes transferriert werden.
 
 
@@ -39,30 +44,36 @@ sudo bash jointoken.sh                         # die Node wird dem Cluster hinzu
 
 
 Auf der Manager-Node:
-kubectl apply -f wfcdeploy.yaml				   # um das Deployment auszurollen
-kubectl delete -f wfcdeploy.yaml			   # um das Deployment zu stoppen
+```kubectl apply -f wfcdeploy.yaml```   # um das Deployment auszurollen
+```kubectl delete -f wfcdeploy.yaml```			   # um das Deployment zu stoppen
 
-kubectl get nodes                              # um den Status aller Nodes abzufragen
-kubectl get pods                               # um den Status aller Pods abzufragen
-kubectl get pods -o wide 					   # um den Status aller Pods inklusive der Zuordnung zu Nodes abzufragen
+```kubectl get nodes```                              # um den Status aller Nodes abzufragen
+```kubectl get pods```                               # um den Status aller Pods abzufragen
+```kubectl get pods -o wide``` 					   # um den Status aller Pods inklusive der Zuordnung zu Nodes abzufragen
 
-kubectl scale deployment/wfcworker-deployment --replicas=X	# Worker während des Betriebs auf X Replicas skalieren
+```kubectl scale deployment/wfcworker-deployment --replicas=X```	# Worker während des Betriebs auf X Replicas skalieren
 
 Über einen Webbrowser können nun folgende Adressen erreicht werden:
 http://[MASTER-NODE-IP]:31000/setRules         # Manager Service um Rules festzulegen (Mapgröße, Anzahl Abschnitte, Entropietoleranz)
 http://[MASTER-NODE-IP]:31001/mapGenerator     # Distributor Service um einen Generierungsprozess anzustoßen, am Ende der Generierung wird die MapID auf der Seite ausgegeben
 
 
-
+### Visualisierung
 Um eine generierte Map zu visualisieren wird die Maploader Applikation verwendet. Diese muss angepasst werden, indem in den Dateien maploader.py sowie wavefunctionlookup.py die IP der Master-Node der Variablen "managerurl" zugewiesen wird.
 Um eine generierte Map anzeigen zu lassen: maploader.py ausführen und MapID eingeben.
 
+### Zeiten aus Datenbank exportieren
 Für die Timeextractor Applikation muss timex.py ebenfalls angepasst werden in dem bei export_database_to_csv(host="XXX.XXX.XX.XX",..) die IP der Manager-Node eingetragen wird.  
 Um gemessene Zeiten abzurufen: timex.py ausführen.
 
-Um eine Reihe von Messungen automatisiert durchzuführen, wird das Skript messen.py verwendet. Am Anfang der Datei muss für die Variable "BASE_IP" die IP der Manager-Node eingetragen werden.
-Durch ausführen des Skripts mit einem Argument X werden alle Messungen durchgeführt welche in der Datei messreihen.csv enthalten sind und für die die Anzahl der Worker X beträgt.
+### Messungen durchführen
+Um eine Reihe von Messungen automatisiert durchzuführen, wird das Skript messen.py verwendet. Am Anfang der Datei muss für die Variable "BASE_IP" die IP der Manager-Node eingetragen werden. Durch ausführen des Skripts mit einem Argument X werden alle Messungen durchgeführt welche in der Datei messreihen.csv enthalten sind und für die die Anzahl der Worker X beträgt. Die gemessenen Zeiten werden durch das Skript zusammen mit den entsprechenden MapIDs in der CSV-Datei eingetragen. 
 Das Skript "messung.sh" kann dazu verwendet werden automatisiert verschiedene Messreihen mit unterschiedlicher Worker-Anzahl durchzuführen. Dazu müssen in der Datei alle Zahlen im Feld "WORKER-COUNTS" aufgelistet werden, mit denen messen.py nacheinander ausgeführt werden soll.
 
 
+## Monitoring
 
+Über die Adresse http://[MASTER-NODE-IP]:31672 kann das RabbitMQ Management aufgerufen werden. Die Zugangsdaten sind User=guest und Passwort=guest. Dort können in Echtzeit die eingehenden Maptickets sowie die Verbundenen Worker (Consumer) überwacht werden.
+
+Um während der Verwendung des messen.py-Skripts den Status der Kubernetes Pods von einem anderen Rechner aus zu überprüfen muss der Ordner ~/.kube/config der Manager-Node kopiert werden. Anschließend kann mit ```kubectl get pods``` der Status angezeigt werden.
+ 
