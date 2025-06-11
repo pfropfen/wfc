@@ -35,24 +35,42 @@ sudo bash k8master.sh
 Anschließend muss die Datei "jointoken.sh" über einen beliebigen Weg auf alle zu verwendenden Nodes transferriert werden.
 
 
-Auf jeder Worker-Node:
-git clone https://github.com/pfropfen/wfc.git  # das Repository klonen
-sudo bash k8node.sh							   # Kubernetes wird vollständig installiert und konfiguriert
+### Auf jeder Worker-Node:
 
+```bash
+# Repository klonen
+git clone https://github.com/pfropfen/wfc.git  
+
+# Kubernetes installieren und konfigurieren
+sudo bash k8node.sh
+```
 Nachdem die Datei "jointoken.sh" von der Master-Node übertragen wurde:
-sudo bash jointoken.sh                         # die Node wird dem Cluster hinzugefügt
+```bash
+# Node zum Cluster hinzufügen
+sudo bash jointoken.sh                         
+```
 
+### Zurück auf der Manager-Node:
 
-Auf der Manager-Node:
-```kubectl apply -f wfcdeploy.yaml```   # um das Deployment auszurollen
-```kubectl delete -f wfcdeploy.yaml```			   # um das Deployment zu stoppen
+```bash
+# Deployment ausrollen
+kubectl apply -f wfcdeploy.yaml
 
-```kubectl get nodes```                              # um den Status aller Nodes abzufragen
-```kubectl get pods```                               # um den Status aller Pods abzufragen
-```kubectl get pods -o wide``` 					   # um den Status aller Pods inklusive der Zuordnung zu Nodes abzufragen
+# Deployment stoppen
+kubectl delete -f wfcdeploy.yaml
 
-```kubectl scale deployment/wfcworker-deployment --replicas=X```	# Worker während des Betriebs auf X Replicas skalieren
+# Status der Nodes
+kubectl get nodes
 
+# Status der Pods
+kubectl get pods
+
+# Status der Pods inklusive Zuordnung zu Nodes
+kubectl get pods -o wide
+
+# Worker während des Betriebs skalieren 					   
+kubectl scale deployment/wfcworker-deployment --replicas=X
+```
 Über einen Webbrowser können nun folgende Adressen erreicht werden:
 http://[MASTER-NODE-IP]:31000/setRules         # Manager Service um Rules festzulegen (Mapgröße, Anzahl Abschnitte, Entropietoleranz)
 http://[MASTER-NODE-IP]:31001/mapGenerator     # Distributor Service um einen Generierungsprozess anzustoßen, am Ende der Generierung wird die MapID auf der Seite ausgegeben
