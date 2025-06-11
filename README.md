@@ -3,14 +3,14 @@
 
 
 
-## Dieses Projekt wurde im Rahmen einer Masterarbeit im Studiengang Informatik erstellt und dient dazu, innerhalb eines Kubernetes Clusters mit Hilfe verschiedener Dienste digitale Landkarten unter Verwendung des Wave Function Collapse Algorithmus zu generieren.
+## Dieses Projekt wurde im Rahmen einer Masterarbeit im Studiengang Informatik erstellt und dient dazu, innerhalb eines Kubernetes Clusters mit Hilfe verschiedener Dienste parallelisiert digitale Landkarten unter Verwendung des Wave Function Collapse Algorithmus zu generieren.
 
 
 
 
 ## Voraussetzungen
 
-* Ein oder mehrere Computer mit einem Linux Betriebssystem (durchgeführt und getestet wurde das Projekt mit Ubuntu Server 22.04 LTS, sowie Ubuntu Server 24.04 LTS). Falls ein einzelner Computer verwendet wird können Virtuelle Maschinen genutzt werden. Empfohlen wird, mindestens 3 Maschinen (1 Manager + 2 Nodes) zu verwenden.
+* Einen oder mehrere Computer mit einem Linux Betriebssystem (durchgeführt und getestet wurde das Projekt mit Ubuntu Server 22.04 LTS, sowie Ubuntu Server 24.04 LTS). Falls ein einzelner Computer verwendet wird können Virtuelle Maschinen genutzt werden. Empfohlen wird, mindestens 3 Maschinen (1 Manager + 2 Nodes) zu verwenden.
 
 * Um einen Generierungsprozess zu starten sowie die Parameter für die Generierung festzulegen, wird ein Webbrowser benötigt.
 
@@ -49,6 +49,7 @@ Nachdem die Datei "jointoken.sh" von der Master-Node übertragen wurde:
 # Node zum Cluster hinzufügen
 sudo bash jointoken.sh                         
 ```
+Das Kubernetes Cluster ist nun einsatzbereit. Die Orchestrierung erfolgt grundsätzlich über die Manager-Node.
 
 ### Zurück auf der Manager-Node:
 
@@ -71,20 +72,23 @@ kubectl get pods -o wide
 # Worker während des Betriebs skalieren 					   
 kubectl scale deployment/wfcworker-deployment --replicas=X
 ```
-Über einen Webbrowser können nun folgende Adressen erreicht werden:
-http://[MASTER-NODE-IP]:31000/setRules         # Manager Service um Rules festzulegen (Mapgröße, Anzahl Abschnitte, Entropietoleranz)
-http://[MASTER-NODE-IP]:31001/mapGenerator     # Distributor Service um einen Generierungsprozess anzustoßen, am Ende der Generierung wird die MapID auf der Seite ausgegeben
 
+### Außerhalb des Clusters:
+Über einen Webbrowser können nun folgende Adressen erreicht werden (ersetze [MANAGER-NODE-IP] durch die vorliegende IP der Manager-Node):
 
-### Visualisierung
-Um eine generierte Map zu visualisieren wird die Maploader Applikation verwendet. Diese muss angepasst werden, indem in den Dateien maploader.py sowie wavefunctionlookup.py die IP der Master-Node der Variablen "managerurl" zugewiesen wird.
-Um eine generierte Map anzeigen zu lassen: maploader.py ausführen und MapID eingeben.
+```text
+http://[MANAGER-NODE-IP]:31000/setRules      -> Manager-Service zur Festlegung der Parameter (Mapgröße, Anzahl Abschnitte, Entropietoleranz)
+http://[MANAGER-NODE-IP]:31001/mapGenerator  -> Distributor-Service zum Starten eines Generierungsprozess, am Ende der Generierung wird die MapID auf der Seite ausgegeben
+```
 
-### Zeiten aus Datenbank exportieren
+## Visualisierung
+Um eine generierte Map zu visualisieren wird die Maploader Applikation verwendet. Diese muss angepasst werden, indem in den Dateien maploader.py sowie wavefunctionlookup.py die IP der Master-Node der Variablen "managerurl" zugewiesen wird. Um eine generierte Map anzeigen zu lassen: maploader.py ausführen und MapID eingeben.
+
+## Zeiten aus Datenbank exportieren
 Für die Timeextractor Applikation muss timex.py ebenfalls angepasst werden in dem bei export_database_to_csv(host="XXX.XXX.XX.XX",..) die IP der Manager-Node eingetragen wird.  
 Um gemessene Zeiten abzurufen: timex.py ausführen.
 
-### Messungen durchführen
+## Messungen durchführen
 Um eine Reihe von Messungen automatisiert durchzuführen, wird das Skript messen.py verwendet. Am Anfang der Datei muss für die Variable "BASE_IP" die IP der Manager-Node eingetragen werden. Durch ausführen des Skripts mit einem Argument X werden alle Messungen durchgeführt welche in der Datei messreihen.csv enthalten sind und für die die Anzahl der Worker X beträgt. Die gemessenen Zeiten werden durch das Skript zusammen mit den entsprechenden MapIDs in der CSV-Datei eingetragen. 
 Das Skript "messung.sh" kann dazu verwendet werden automatisiert verschiedene Messreihen mit unterschiedlicher Worker-Anzahl durchzuführen. Dazu müssen in der Datei alle Zahlen im Feld "WORKER-COUNTS" aufgelistet werden, mit denen messen.py nacheinander ausgeführt werden soll.
 
