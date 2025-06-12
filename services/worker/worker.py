@@ -14,7 +14,7 @@ timekeeperurl = "http://wfctimekeeper:6002"
 rabbithost = "wfcrabbit"
 
 # RABBITMQ CONNECTION
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost, heartbeat=3600))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbithost, heartbeat=7200))
 channel = connection.channel()
 channel.queue_declare(queue='maptickets', durable=True)
 
