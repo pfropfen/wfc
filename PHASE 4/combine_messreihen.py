@@ -54,7 +54,7 @@ def merge_multiple_csv_files(filepaths, output_file, missing_output):
 
 # Example usage:
 merge_multiple_csv_files(
-    ['RUN1/messreihen.csv', 'RUN2/messreihen.csv'],
+    ['RUN1/messreihen_complete.csv', 'RUN2/messreihen_complete.csv', 'RUN3/messreihen_complete.csv'],
     'merged_messreihen.csv',
     'missing_values.csv'
 )
