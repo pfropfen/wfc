@@ -1,11 +1,11 @@
 SIZE,PARTS,WORKER,MissingInFile
-192,1,1,RUN1/messreihen_complete.csv
-192,1,1,RUN3/messreihen_complete.csv
-192,4,1,RUN1/messreihen_complete.csv
-192,4,1,RUN3/messreihen_complete.csv
+192,1,1,RUN1/messreihen_complete.csv	142581ca-f0ff-4dc5-ac38-f542185e8a1c	FAIL
+192,1,1,RUN3/messreihen_complete.csv	-
+192,4,1,RUN1/messreihen_complete.csv	df626dd0-8a72-4409-826f-a01653c06046
+192,4,1,RUN3/messreihen_complete.csv	b4a619fb-4b9d-4111-8458-1226cf9180ca
 208,1,1,RUN1/messreihen_complete.csv
 208,1,1,RUN3/messreihen_complete.csv
-208,4,1,RUN1/messreihen_complete.csv
+208,4,1,RUN1/messreihen_complete.csv	
 208,4,1,RUN3/messreihen_complete.csv
 224,1,1,RUN1/messreihen_complete.csv
 224,1,1,RUN3/messreihen_complete.csv
