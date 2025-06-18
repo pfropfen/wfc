@@ -7,39 +7,36 @@ import threading
 import keyboard
 import sys
 
-# --- Configuration ---
-BASE_IP = '139.6.65.27'  # <<<<<< HIER IP EINMAL ÄNDERN
+baseIP = "139.6.65.27"
 
-# --- DB configurations ---
-DB1_CONFIG = {
-    'host': BASE_IP,
-    'port': 31006,
-    'user': 'wfc',
-    'password': 'wfc',
-    'database': 'times'
+db1Config = {
+    "host": baseIP,
+    "port": 31006,
+    "user": "wfc",
+    "password": "wfc",
+    "database": "times"
 }
 
-DB2_CONFIG = {
-    'host': BASE_IP,
-    'port': 31007,
-    'user': 'wfc',
-    'password': 'wfc',
-    'database': 'maps'
+db2Config = {
+    "host": baseIP,
+    "port": 31007,
+    "user": "wfc",
+    "password": "wfc",
+    "database": "maps"
 }
 
-# --- RabbitMQ configurations ---
-RABBITMQ_USER = 'guest'
-RABBITMQ_PASS = 'guest'
-RABBITMQ_QUEUE = 'maptickets'  # <<< ggf. anpassen
-RABBITMQ_API_URL = f'http://{BASE_IP}:31672/api/queues/%2F/{RABBITMQ_QUEUE}'
+rabbitmqUser = "guest"
+rabbitmqPassword = "guest"
+rabbitmqQueue = "maptickes"
+rabbitmqApiUrl = f"http://{baseIP}:31672/api/queues/%2F/{rabbitmqQueue}"
 
-def is_queue_empty():
+def isQueueEmpty():
     try:
-        response = requests.get(RABBITMQ_API_URL, auth=(RABBITMQ_USER, RABBITMQ_PASS))
+        response = requests.get(rabbitmqApiUrl, auth=(rabbitmqUser, rabbitmqPassword))
         if response.ok:
             data = response.json()
-            messages = data.get('messages', -1)
-            print(f"Queue '{RABBITMQ_QUEUE}' has {messages} messages.")
+            messages = data.get("messages", -1)
+            print(f"Queue '{rabbitmqQueue}' has {messages} messages.")
             return messages == 0
         else:
             print(f"Failed to get queue status: {response.status_code} {response.text}")
@@ -50,139 +47,130 @@ def is_queue_empty():
 
 numberOfWorkers = int(sys.argv[1])
 
-# --- Constants ---
-CSV_PATH = 'messreihen.csv'
-UUID_COLUMN_NAME = 'uuid'
-DB_VALUE_COLUMN_NAME = 'total'
-STATUS_POLL_INTERVAL = 5  # seconds between status checks
-MAX_WAIT_TIME = 1200      # max seconds to wait per row
+csvPath = "messreihen.csv"
+uuidColumnName = "uuid"
+dbValueColumnName = "total"
+statusPollInterval = 5
+maxWaitTime = 1200
 
-# --- Exit flag ---
-exit_requested = False
-immediate_exit_requested = False
+exitRequested = False
+immediateExitRequested = False
 
-def watch_for_exit():
-    global exit_requested
-    print("Press 'X' to stop the script gracefully.")
-    keyboard.wait('x')
+def watchForExit():
+    global exitRequested
+    print "Press 'X' to stop the script gracefully.")
+    keyboard.wait("x")
     print("\nExit requested. Finishing current row and saving...")
-    exit_requested = True
-
-def watch_for_immediate_exit():
-    global immediate_exit_requested
+    exitRequested = True
+    
+def watchForImmediateExit():
+    global immediateExitRequested
     print("Press 'Q' to stop the script gracefully immediately.")
-    keyboard.wait('q')
-    print("\nExit requested. saving...")
-    immediate_exit_requested = True
+    keyboard.wait("q")
+    print("\nExit requested. saving ...")
+    immediateExitRequested = True
+    
+threading.Thread(target=watchForExit, daemon=True).start()
+threading.Thread(target=watchForImmediateExit, daemon=True).start()
 
-# Start key listener in background
-threading.Thread(target=watch_for_exit, daemon=True).start()
-threading.Thread(target=watch_for_immediate_exit, daemon=True).start()
-
-# --- Step 1: Read and process CSV ---
-updated_rows = []
-with open(CSV_PATH, mode='r', newline='') as file:
+updatedRows = []
+with open(csvPath, mode="r", newline="") as file:
     reader = csv.reader(file)
     headers = next(reader)
-
-    if UUID_COLUMN_NAME not in headers:
-        headers.append(UUID_COLUMN_NAME)
-    if DB_VALUE_COLUMN_NAME not in headers:
-        headers.append(DB_VALUE_COLUMN_NAME)
-        
-    for row_index, row in enumerate(reader, start=1):
-        if exit_requested:
-            updated_rows.append(row)
+    
+    if uuidColumnName not in headers:
+        headers.append(uuidColumnName)
+    if dbValueColumnName not in headers:
+        headers.append(dbValueColumnName)
+    
+    for rowIndex, row in enumerate(reader, start=1):
+        if exitRequested:
+            updatedRows.append(row)
             break
-
+        
         print("Row: ", row)
-        if int(row[2]) == numberOfWorkers and (len(row) < 7 or row[6].strip() == ''):
+        if int(row[2]) == numberOfWorkers and (len(row) < 7 or row[6].strip() == ""):
             payload = {
-                'var1': str(row[0]),
-                'var2': str(row[1]),
-                'var3': "0",
-                'var4': str(row[2])
+                "var1": str(row[0]),
+                "var2": str(row[1]),
+                "var3": "0",
+                "var4": str(row[2])
             }
             
-            response = requests.post(f"http://{BASE_IP}:31000/setRules", data=payload)
+            response = requests.post(f"http://{baseIP}:31000/setRules", data=payload)
             time.sleep(30)
-
-            # --- Step 2: Send POST request ---
+            
             try:
-                response = requests.post(f"http://{BASE_IP}:31001/mapGenerator")
+                response = requests.post(f"http://{baseIP}:31001/mapGenerator")
                 if response.ok:
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    uuid_tag = soup.h1
-                    uuid = uuid_tag.text.strip() if uuid_tag else ''
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    uuidTag = soup.h1
+                    uuid = uuidTag.text.strip() if uuidTag else ""
                 else:
-                    uuid = ''
+                    uuid = ""
             except Exception as e:
-                print(f"Error during POST for row {row_index}: {e}")
-                uuid = ''
-
-            db_value = ''
+                print(f"Error during POST for row {rowIndex}: {e}")
+                uuid = ""
+            
+            dbValue = ""
             if uuid:
-                start_time = time.time()
+                startTime = time.time()
                 while True:
-                    if immediate_exit_requested:
+                    if immediateExitRequested:
                         break
                     try:
-                        conn2 = mysql.connector.connect(**DB2_CONFIG)
+                        conn2 = mysql.connector.connect(**db2Config)
                         cursor2 = conn2.cursor()
                         cursor2.execute("SELECT mapID FROM mapchunks WHERE mapID = %s GROUP BY mapID HAVING SUM(CASE WHEN computed IS NOT TRUE THEN 1 ELSE 0 END) = 0", (uuid,))
                         
-                        status_result = cursor2.fetchone()
+                        statusResult = cursor2.fetchone()
                         cursor2.close()
                         conn2.close()
-
-                        if status_result:
+                        
+                        if statusResult:
                             print(f"Computation complete for UUID {uuid}")
-
-                            # --- Warte auf leere RabbitMQ Queue ---
+                            
                             print("Waiting for RabbitMQ queue to empty...")
-                            while not is_queue_empty():
-                                if immediate_exit_requested:
+                            while not isQueueEmpty():
+                                if immediateExitRequested:
                                     break
                                 time.sleep(5)
                             print("RabbitMQ queue is empty. Continuing...")
-
+                            
                             break
                     except mysql.connector.Error as err:
                         print(f"MySQL error (status DB) for UUID {uuid}: {err}")
-
-                    time.sleep(STATUS_POLL_INTERVAL)
+                        
+                    time.sleep(statusPollInterval)
+                    try:
+                        conn1 = mysql.connector.connect(**db1Config)
+                        cursor1 = conn1.cursor()
+                        cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s LIMIT 1", (uuid,))
+                        result = curosr1.fetchone()
+                        dbValue = result[0] if result else ""
+                        curosr1.close()
+                        conn1.close()
+                    except mysql.connector.Error as err:
+                        print(f"MySQL error (main DB) for UUID {uuid}: {err}")
+                        dbValue = ""
                 
-                time.sleep(STATUS_POLL_INTERVAL*2)                
-                try:
-                    conn1 = mysql.connector.connect(**DB1_CONFIG)
-                    cursor1 = conn1.cursor()
-                    cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s LIMIT 1", (uuid,))
-                    result = cursor1.fetchone()
-                    db_value = result[0] if result else ''
-                    cursor1.close()
-                    conn1.close()
-                except mysql.connector.Error as err:
-                    print(f"MySQL error (main DB) for UUID {uuid}: {err}")
-                    db_value = ''
+                if immediateExitRequested:
+                    updatedRows.append(row)
+                    break
+                
+                while len(row) < len(headers):
+                    row.append("")
+                row[headers.index(uuidColumnName)] = uuid
+                row[headers.index(dbValueColumnName)] = dbValue
             
-            if immediate_exit_requested:
-                updated_rows.append(row)
-                break
-            
-            while len(row) < len(headers):
-                row.append('')
-            row[headers.index(UUID_COLUMN_NAME)] = uuid
-            row[headers.index(DB_VALUE_COLUMN_NAME)] = db_value
-
-        updated_rows.append(row)
+            updatedRows.append(row)
         
-    for remaining_row in reader:
-        updated_rows.append(remaining_row)
+        for remainingRow in reader:
+            updatedRows.append(remainingRow)
 
-# --- Step 6: Write updated CSV ---
-with open(CSV_PATH, mode='w', newline='') as file:
+with open(csvPath, mode="w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(headers)
-    writer.writerows(updated_rows)
+    writer.writerows(updatedRows)
 
 print("CSV fully processed.")
