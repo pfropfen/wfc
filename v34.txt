@@ -1,0 +1,31 @@
+VERSION HISTORY
+---------------
+v34 messreihen completed, repo cleaned
+v33 bugfix wave.py fixed entropyTolerance
+v32 prepared for phase4 with new script
+v31 measures phase3 run1+2 done, prepared for run3
+v30 measures phase1 done, prepared for phase2, changed messen.py
+v29 added messreihen.xlxs
+v28 added notes and manual
+v27 added architecture picture to repo
+v26 cleanup
+v25 STABLE
+v24 measurement fixes and set rules
+v23 STABLE time measure and timeextract
+v22 volume managing
+v21 updateMapTime for TimeKeeper, volume managing
+v20 STABLE (last bugfixes)
+v19 work on k8s config and yaml
+v18 work on deployment and k8s config, changed build script
+v17 work on deployment
+v16 added scripts for k8s install and config for master and node
+v15 work on k8s deployment, changed rebirth script, k8s config
+v14 work on k8s deployment, added rebirth script
+v13 added hubdb, added rabbitmq, first k8s deployment, scripts for build and push
+v12 services structure changed and bugfixes
+v11 architecture and services cleanup
+v10 added maploader service
+v09 bugfixes for hub service
+v08 added db for hub service
+v07 added test service for hub
+

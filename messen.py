@@ -27,7 +27,7 @@ db2Config = {
 
 rabbitmqUser = "guest"
 rabbitmqPassword = "guest"
-rabbitmqQueue = "maptickes"
+rabbitmqQueue = "maptickets"
 rabbitmqApiUrl = f"http://{baseIP}:31672/api/queues/%2F/{rabbitmqQueue}"
 
 def isQueueEmpty():
@@ -58,7 +58,7 @@ immediateExitRequested = False
 
 def watchForExit():
     global exitRequested
-    print "Press 'X' to stop the script gracefully.")
+    print("Press 'X' to stop the script gracefully.")
     keyboard.wait("x")
     print("\nExit requested. Finishing current row and saving...")
     exitRequested = True
@@ -146,9 +146,9 @@ with open(csvPath, mode="r", newline="") as file:
                         conn1 = mysql.connector.connect(**db1Config)
                         cursor1 = conn1.cursor()
                         cursor1.execute("SELECT totalDuration FROM mapTimes WHERE mapID = %s LIMIT 1", (uuid,))
-                        result = curosr1.fetchone()
+                        result = cursor1.fetchone()
                         dbValue = result[0] if result else ""
-                        curosr1.close()
+                        cursor1.close()
                         conn1.close()
                     except mysql.connector.Error as err:
                         print(f"MySQL error (main DB) for UUID {uuid}: {err}")
