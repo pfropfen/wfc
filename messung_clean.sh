@@ -10,7 +10,7 @@ read -s -p "Bitte gib dein sudo-Passwort ein: " sudoPassword
 echo
 
 runWithSudo(){
-	echo "$sudoPassword" | sudo -S "§@"
+	echo "$sudoPassword" | sudo -S "$@"
 }
 
 waitForPodsRunning(){
@@ -40,6 +40,9 @@ for X in "${workerCounts[@]}"; do
 	kubectl scale deployment "$deploymentName" --replicas="$X" -n "$namespace"
 	
 	waitForPodsRunning "$X"
+	
+	echo "==> Führe messen.py mit X=$X aus..."
+	runWithSudo python3 messen.py "$X"
 	
 	echo "==> Durchlauf für X=$X abgeschlossen."
 	echo
