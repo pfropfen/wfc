@@ -21,14 +21,14 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     
     required = ["size", "parts", "worker"]
     for col in required:
-        if col not in df-columns:
+        if col not in df.columns:
             sys.exit(f"Missing required column: {col}")
     
     if runColumns is None:
         runColumns = [col for col in df.columns if col.startswith("run")]
     else:
-        runColumns = [col.lower() for col in run_columns]
-        for run_col in runColumns:
+        runColumns = [col.lower() for col in runColumns]
+        for runCol in runColumns:
             if runCol not in df.columns:
                 sys.exit(f"Run column {runCol} not found in CSV-file.")
                 
@@ -110,7 +110,7 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     plt.show()
     
 
-def fitAndPlotRegressioin(xClean, yClean, regressionType, polyDegree, label):
+def fitAndPlotRegression(xClean, yClean, regressionType, polyDegree, label):
     try:
         if regressionType == "poly":
             coeffs = np.polyfit(xClean, yClean, deg=polyDegree)
@@ -123,22 +123,66 @@ def fitAndPlotRegressioin(xClean, yClean, regressionType, polyDegree, label):
             
             xSorted = np.sort(xClean)
             ySortedFit = fitFn(xSorted)
-            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha0.7,
-                     label=f"Fit: {label} (poly, R²={rSquared:.2f})")
+            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha=0.7,
+                     label=f"Fit: {label} (poly, R²={rSquared:.7f})")
                      
             equationTerms = []
             for j, coef in enumerate(coeffs[::-1]):
-                power = join
+                power = j
                 if abs(coef) < 1e-6:
                     continue
                 if power == 0:
-                    equationTerms.append(f"{coef:.2f}")
+                    equationTerms.append(f"{coef:.7f}")
                 elif power == 1:
-                    equationTerms.append(f"{coef:.2f}x")
+                    equationTerms.append(f"{coef:.7f}x")
                 else:
-                    equationTerms.append(f"{coef:.2f}x^{power}")
+                    equationTerms.append(f"{coef:.7f}x^{power}")
             equation = " + ".join(equationTerms).replace("+ -", "- ")
         else:
             p0 = [np.max(yClean), 1, np.median(xClean)]
             params, _ = curve_fit(logisticFunction, xClean, yClean, p0=p0, maxfev=10000)
-            fitFn = lambda    # ZEILE 150 IM ORGINAL
+            fitFn = lambda x: logisticFunction(x, *params)
+            yFit = fitFn(xClean)
+            
+            ssRes = np.sum((yClean - yFit) ** 2)
+            ssTot = np.sum((yClean - np.mean(yClean)) ** 2)
+            rSquared = 1 - ssRes / ssTot if ssTot != 0 else 0
+            
+            xSorted = np.sort(xClean)
+            ySortedFit = fitFn(xSorted)
+            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha=0.7,
+                    label=f"Fit: {label} (logistic, R²={rSquared:.7f})")
+                    
+            L, k, x0 = params
+            equation = f"{L:.7f} / (1 + exp(-{k:.7f}(x - {x0:.7f})))"
+        
+        textX = xSorted[-1]
+        textY = ySortedFit[-1]
+        plt.text(textX, textY, f"$y = {equation}$", fontsize=8, ha="right", va="bottom", alpha=0.7)
+    except Exception as e:
+        print(f"Failed to fit {regressionType} regression for {label}: {e}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Plot experimental data from a CSV file.")
+    parser.add_argument("csv_file", help="Path to the CSV file")
+    parser.add_argument("--start", type=int, default=0, help="Start index of groups to plot")
+    parser.add_argument("--end", type=int, default=None, help="End index of groups to plot")
+    parser.add_argument("--points-only", action="store_true", help="Plot only points (no lines)")
+    parser.add_argument("--runs", nargs="+", help="Specify which Run columns to include (e.g. run1 Run2 RUN3)")
+    parser.add_argument("--poly-degree", type=int, default=2, help="Degree of polynomial regression (if used)")
+    parser.add_argument("--average-runs", action="store_true", help="Plot the average of all selected runs instead of each run individually")
+    parser.add_argument("--regression-type", choices=["poly", "logistic"], default="poly",
+                        help="Type of regression to fit: 'poly' or 'logistic' (default: poly)")
+    
+    args = parser.parse_args()
+    
+    plotExperimentData(
+        csvFile=args.csv_file,
+        startIndex=args.start,
+        endIndex=args.end,
+        pointsOnly=args.points_only,
+        runColumns=args.runs,
+        polyDegree=args.poly_degree,
+        averageRuns=args.average_runs,
+        regressionType=args.regression_type
+    )
