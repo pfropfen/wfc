@@ -12,7 +12,7 @@ def logisticFunction(x, L, k, x0):
 
 def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
                         runColumns=None, polyDegree=2, averageRuns=False,
-                        regressionType="poly"):
+                        regressionType="poly", selectedSizePerPart=None):
     # LOAD CSV-FILE
     df = pd.read_csv(csvFile)
     
@@ -38,17 +38,22 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     
     df = df.dropna(subset=["size"])
     
-    # grouping by parts and worker
-    groups = list(df.groupby(["parts", "worker"]))
+    df["size_per_part"] = (df["size"] ** 2) / df["parts"]
+    
+    if selectedSizePerPart is not None:
+        df = df[df["size_per_part"].isin(selectedSizePerPart)]
+    
+    groups = list(df.groupby(["size_per_part"]))
+    #groups = list(df.groupby(["parts", "worker"]))
     
     if endIndex is None:
         endIndex = len(groups)
     selectedGroups = groups[startIndex:endIndex]
     
-    plt.figure(figsize=(12,8))
+    plt.figure(figsize=(14,8))
     
-    for (parts,worker), group in selectedGroups:
-        labelBase = f"{parts} - {worker}"
+    for (sizePerPart), group in selectedGroups:
+        labelBase = f"{sizePerPart}"
         
         if averageRuns:
             x=group["size"].values
@@ -97,7 +102,7 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     
     plt.xlabel("Size")
     plt.ylabel("Measurement")
-    plt.title("Experiment Results by Parts & Worker")
+    plt.title("Experiment Results by Chunksize")
     plt.legend(
         loc="center left",
         bbox_to_anchor=(1.0, 0.5),
@@ -123,8 +128,6 @@ def fitAndPlotRegression(xClean, yClean, regressionType, polyDegree, label):
             
             xSorted = np.sort(xClean)
             ySortedFit = fitFn(xSorted)
-            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha=0.7,
-                     label=f"Fit: {label} (poly, R²={rSquared:.7f})")
                      
             equationTerms = []
             for j, coef in enumerate(coeffs[::-1]):
@@ -138,6 +141,9 @@ def fitAndPlotRegression(xClean, yClean, regressionType, polyDegree, label):
                 else:
                     equationTerms.append(f"{coef:.7f}x^{power}")
             equation = " + ".join(equationTerms).replace("+ -", "- ")
+            
+            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha=0.7,
+                     label=f"Fit: {label} (R²={rSquared:.4f})\ny={equation:<70}")
         else:
             p0 = [np.max(yClean), 1, np.median(xClean)]
             params, _ = curve_fit(logisticFunction, xClean, yClean, p0=p0, maxfev=10000)
@@ -150,15 +156,13 @@ def fitAndPlotRegression(xClean, yClean, regressionType, polyDegree, label):
             
             xSorted = np.sort(xClean)
             ySortedFit = fitFn(xSorted)
-            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha=0.7,
-                    label=f"Fit: {label} (logistic, R²={rSquared:.7f})")
                     
             L, k, x0 = params
             equation = f"{L:.7f} / (1 + exp(-{k:.7f}(x - {x0:.7f})))"
+            
+            plt.plot(xSorted, ySortedFit, linestyle="--", linewidth=1.5, alpha=0.7,
+                    label=f"Fit: {label} (R²={rSquared:.4f})\ny={equation}")
         
-        textX = xSorted[-1]
-        textY = ySortedFit[-1]
-        plt.text(textX, textY, f"$y = {equation}$", fontsize=8, ha="right", va="bottom", alpha=0.7)
     except Exception as e:
         print(f"Failed to fit {regressionType} regression for {label}: {e}")
 
@@ -173,6 +177,7 @@ if __name__ == "__main__":
     parser.add_argument("--average-runs", action="store_true", help="Plot the average of all selected runs instead of each run individually")
     parser.add_argument("--regression-type", choices=["poly", "logistic"], default="poly",
                         help="Type of regression to fit: 'poly' or 'logistic' (default: poly)")
+    parser.add_argument("--select-size-per-part", nargs="+", type=float, help="List of specific chunksizes to include")
     
     args = parser.parse_args()
     
@@ -184,5 +189,6 @@ if __name__ == "__main__":
         runColumns=args.runs,
         polyDegree=args.poly_degree,
         averageRuns=args.average_runs,
-        regressionType=args.regression_type
+        regressionType=args.regression_type,
+        selectedSizePerPart=args.select_size_per_part
     )
