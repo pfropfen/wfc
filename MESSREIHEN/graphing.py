@@ -43,8 +43,8 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     if selectedSizePerPart is not None:
         df = df[df["size_per_part"].isin(selectedSizePerPart)]
     
-    groups = list(df.groupby(["size_per_part"]))
-    #groups = list(df.groupby(["parts", "worker"]))
+    #groups = list(df.groupby(["size_per_part"]))
+    groups = list(df.groupby(["parts", "worker"]))
     
     if endIndex is None:
         endIndex = len(groups)
@@ -52,8 +52,8 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     
     plt.figure(figsize=(14,8))
     
-    for (sizePerPart), group in selectedGroups:
-        labelBase = f"{sizePerPart}"
+    for (parts, worker), group in selectedGroups:
+        labelBase = f"{parts}-{worker}"
         
         if averageRuns:
             x=group["size"].values
@@ -102,7 +102,7 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     
     plt.xlabel("Size")
     plt.ylabel("Measurement")
-    plt.title("Experiment Results by Chunksize")
+    plt.title("Experiment Results by Parts & Worker")
     plt.legend(
         loc="center left",
         bbox_to_anchor=(1.0, 0.5),
@@ -110,7 +110,7 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
         title="Legend"
     )
     plt.grid(True)
-    #plt.yscale("log")
+    plt.yscale("log")
     plt.tight_layout(rect=[0,0,0.85,1])
     plt.show()
     
