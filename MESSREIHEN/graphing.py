@@ -41,7 +41,9 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
     df["size_per_part"] = (df["size"] ** 2) / df["parts"]
     
     if selectedSizePerPart is not None:
-        df = df[df["size_per_part"].isin(selectedSizePerPart)]
+        #df = df[df["size_per_part"].isin(selectedSizePerPart)]
+        df = df[df["worker"].isin(selectedSizePerPart)]
+    
     
     #groups = list(df.groupby(["size_per_part"]))
     groups = list(df.groupby(["parts", "worker"]))
@@ -110,7 +112,7 @@ def plotExperimentData(csvFile, startIndex=0, endIndex=None, pointsOnly=False,
         title="Legend"
     )
     plt.grid(True)
-    plt.yscale("log")
+    #plt.yscale("log")
     plt.tight_layout(rect=[0,0,0.85,1])
     plt.show()
     
