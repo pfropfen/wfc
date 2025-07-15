@@ -2,7 +2,7 @@ import os
 import requests
 import visualization
 
-HUBADDR = "139.6.65.27"
+HUBADDR = "192.168.178.56"
 HUBPORT = "31002"
 
 huburl = "http://"+HUBADDR+":"+HUBPORT+"/"
